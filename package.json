@@ -5,13 +5,25 @@
   "engines": {
     "node": ">=22.12.0"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "files": [
+    "src",
+    "!src/pages",
+    "!src/env.d.ts"
+  ],
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
-  "dependencies": {
+  "peerDependencies": {
+    "astro": "^7.3.5"
+  },
+  "devDependencies": {
     "astro": "^7.3.5"
   },
   "allowScripts": {
