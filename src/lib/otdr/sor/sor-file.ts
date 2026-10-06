@@ -18,7 +18,7 @@ export class ParsedSORFile {
 
         console.log(`${JSON.stringify(this.mapBlock)}`);
         console.log("==============================================");
-        console.log(`${JSON.stringify(this.offsets)}`);
+        console.log(`${JSON.stringify(Object.fromEntries(this.offsets))}`);
         console.log("==============================================");
         console.log(`${JSON.stringify(this.generalParamsBlock)}`);
     }
@@ -67,21 +67,19 @@ export class ParsedSORFile {
 
         let offsets = new Map();
 
-        console.log("current value: " + JSON.stringify(this.mapBlock));
-
         this.mapBlock.blockSizes.forEach((bInfo: blockInfo) => {
             offsets.set(bInfo.blockName, running);
             running += bInfo.blockSize;
         });
 
-        offsets.keys().forEach((blockKey) => {
-            offsets.set(blockKey, offsets.get(blockKey) + this.mapBlock.mapBlockSizeBytes);
-        });
+        for (const blockKey of offsets.keys()) {
+            offsets.set(blockKey, offsets.get(blockKey)! + this.mapBlock.mapBlockSizeBytes);
+        }
 
         return offsets;
     }
 
     parseGenParams(): GenParamsBlock {
-        
+        throw new Error("not implemented");
     }
 }
