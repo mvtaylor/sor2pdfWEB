@@ -11,7 +11,7 @@ export class ParsedSORFile {
         this.br = binaryReader;
         this.mapBlock = this.parseMapBlock();
 
-        console.log(`${this.mapBlock}`);
+        console.log(`${JSON.stringify(this.mapBlock)}`);
     }
 
     parseMapBlock(): MapBlock {
@@ -22,9 +22,12 @@ export class ParsedSORFile {
         const mapBlockSize = this.br.readUint32();
         const numBlocks = this.br.readUint16();
 
-        const blockSizes: blockInfo[] = blockStarters.slice(1).map((starter) => {
+        const blockSizes: blockInfo[] = blockStarters.slice(1, -1).map((starter) => {
             const blockName = this.br.readCString();
-            if (blockName !== starter) throw Error("Unexpected block order!");
+            if (blockName !== starter) {
+                console.log(`${blockName} vs. ${starter}`);
+                throw Error("Unexpected block order!");
+            }
 
             const blockVer = this.br.readUint16();
             const blockLen = this.br.readUint32();
