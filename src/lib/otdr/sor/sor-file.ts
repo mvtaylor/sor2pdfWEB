@@ -1,20 +1,30 @@
 
-import type { BinaryReader } from "../binary-reader";
+import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, MapBlock } from "./blocks";
+import type { blockInfo, GenParamsBlock, MapBlock } from "./blocks";
 
 export class ParsedSORFile {
     private br: BinaryReader;
+    private offsets: Map<string, number>;
+
     mapBlock: MapBlock;
+    generalParamsBlock: GenParamsBlock;
 
     constructor(binaryReader: BinaryReader) {
         this.br = binaryReader;
         this.mapBlock = this.parseMapBlock();
+        this.offsets = this.constructOffsets();
+        this.generalParamsBlock = this.parseGenParams();
 
         console.log(`${JSON.stringify(this.mapBlock)}`);
+        console.log("==============================================");
+        console.log(`${JSON.stringify(this.offsets)}`);
+        console.log("==============================================");
+        console.log(`${JSON.stringify(this.generalParamsBlock)}`);
     }
 
     parseMapBlock(): MapBlock {
+        this.br.seek(0);
         const mapHeader: string = this.br.readCString();
         if (mapHeader !== "Map") throw Error("Invalid header on SOR file");
 
@@ -50,5 +60,28 @@ export class ParsedSORFile {
         };
 
         return res;
+    }
+
+    constructOffsets(): Map<string, number> {
+        let running = 0;
+
+        let offsets = new Map();
+
+        console.log("current value: " + JSON.stringify(this.mapBlock));
+
+        this.mapBlock.blockSizes.forEach((bInfo: blockInfo) => {
+            offsets.set(bInfo.blockName, running);
+            running += bInfo.blockSize;
+        });
+
+        offsets.keys().forEach((blockKey) => {
+            offsets.set(blockKey, offsets.get(blockKey) + this.mapBlock.mapBlockSizeBytes);
+        });
+
+        return offsets;
+    }
+
+    parseGenParams(): GenParamsBlock {
+        
     }
 }
