@@ -80,6 +80,6 @@ export class ParsedSORFile {
     }
 
     parseGenParams(): GenParamsBlock {
-        throw new Error("not implemented");
+        //throw new Error("not implemented");
     }
 }
