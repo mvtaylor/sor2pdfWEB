@@ -51,6 +51,25 @@ export class ParsedSORFile {
             return res;
         });
 
+        // TODO: new way of parsing out all the block infos
+
+        const blockSizesNew = [];
+        
+        while (this.br.tell() < mapBlockSize) {
+            const blockName = this.br.readCString();
+
+            const blockVer = this.br.readUint16();
+            const blockLen = this.br.readUint32();
+
+            const newBInfo: blockInfo = {
+                blockName: blockName,
+                version: blockVer,
+                blockSize: blockLen
+            };
+
+            blockSizesNew.push(newBInfo);
+        }
+
         const res = {
             version: vernum,
             mapBlockSizeBytes: mapBlockSize,
