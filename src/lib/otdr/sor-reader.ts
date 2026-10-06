@@ -1,7 +1,9 @@
 import { BinaryReader } from "./binary-reader";
+import { ParsedSORFile } from "./sor/sor-file";
 
 export class SorReader {
     private br: BinaryReader;
+    private sorfile!: ParsedSORFile;
 
     // private mapblock;
     // private genparams;
@@ -12,7 +14,7 @@ export class SorReader {
     }
 
     public parse() {
-
+        this.sorfile = new ParsedSORFile(this.br);
     }
 
     public results() {

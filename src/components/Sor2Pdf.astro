@@ -4,4 +4,19 @@
 <form>
 	<label for="sor-file">SOR file</label>
 	<input type="file" id="sor-file" name="sor-file" accept=".sor" />
+	<input type="button" id="convert-button" name="convert-button" value="Convert" />
 </form>
+
+<script>
+import { SorReader } from "../lib/otdr/sor-reader";
+
+document.getElementById("convert-button")?.addEventListener("click", async (event) => {
+	const fileSelector = document.getElementById("sor-file") as HTMLInputElement;
+	const selectedFile: File | null = fileSelector.files !== null ? fileSelector.files[0] : null;
+	if (selectedFile === null) throw Error("No file selected!");
+
+	const fileContents = await selectedFile.arrayBuffer();
+	const reader = new SorReader(fileContents);
+	reader.parse();
+});
+</script>

@@ -11,8 +11,8 @@ enum blockName {
     Cksum = "Cksum"
 }
 
-interface blockSize {
-    blockName: blockName;
+export interface blockInfo {
+    blockName: string;
     version: number;
     blockSize: number;
 }
@@ -22,7 +22,7 @@ export interface MapBlock {
     mapBlockSizeBytes: number;
     numberOfBlocks: number;
 
-    blockSizes: blockSize[];
+    blockSizes: blockInfo[];
 }
 
 
