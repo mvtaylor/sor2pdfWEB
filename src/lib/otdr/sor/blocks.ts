@@ -13,6 +13,7 @@ enum blockName {
 
 interface blockSize {
     blockName: blockName;
+    version: number;
     blockSize: number;
 }
 
@@ -23,4 +24,22 @@ export interface MapBlock {
 
     blockSizes: blockSize[];
 }
+
+
+export interface GenParamsBlock {
+    cableID: string;
+    fiberID: string;
+    fiberType: number;
+    wavelength: number;
+    locationA: string;
+    locationB: string;
+    cableCode: string;
+    buildCondition: string;
+    userOffset: number;
+    userOffsetDistance: number;
+    operator: string;
+    comments: string; 
+}
+
+
 
