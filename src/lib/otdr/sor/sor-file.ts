@@ -26,7 +26,7 @@ export class ParsedSORFile {
     parseMapBlock(): MapBlock {
         this.br.seek(0);
         const mapHeader: string = this.br.readCString();
-        if (mapHeader !== "Map") throw Error("Invalid header on SOR file");
+        if (mapHeader !== "Map") throw new Error("Invalid header on SOR file");
 
         const vernum = this.br.readUint16();
         const mapBlockSize = this.br.readUint32();
@@ -37,7 +37,7 @@ export class ParsedSORFile {
             const blockName = this.br.readCString();
             if (blockName !== starter) {
                 console.log(`${blockName} vs. ${starter}`);
-                throw Error("Unexpected block order!");
+                throw new Error("Unexpected block order!");
             }
 
             const blockVer = this.br.readUint16();
@@ -71,7 +71,7 @@ export class ParsedSORFile {
             blockSizesNew.push(newBInfo);
         }
 
-        const res = {
+        const res: MapBlock = {
             version: vernum,
             mapBlockSizeBytes: mapBlockSize,
             numberOfBlocks: numBlocks,
@@ -100,6 +100,47 @@ export class ParsedSORFile {
     }
 
     parseGenParams(): GenParamsBlock {
-        //throw new Error("not implemented");
+        const blockStart = this.offsets.get("GenParams");
+        if (blockStart === undefined) throw new Error("Unable to get GenParams start byte");
+        this.br.seek(blockStart);
+
+        const blockName = this.br.readCString();
+        if (blockName !== "GenParams") throw new Error("Error encountered while parsing GenParams: block name is not GenParams");
+
+        const cableID = this.br.readCString();
+        const fiberID = this.br.readCString();
+
+        const fiberType = this.br.readUint16();
+        const wavelength = this.br.readUint16();
+
+        const locA = this.br.readCString();
+        const locB = this.br.readCString();
+
+        const cableCode = this.br.readCString();
+
+        const buildCondition = this.br.readChars(2);
+
+        const userOffset = this.br.readInt32();
+        const userOffsetDistance = this.br.readInt32();
+
+        const operator = this.br.readCString();
+        const comments = this.br.readCString();
+
+        const genp: GenParamsBlock = {
+            cableID: cableID,
+            fiberID: fiberID,
+            fiberType: fiberType,
+            wavelength: wavelength,
+            locationA: locA,
+            locationB: locB,
+            cableCode: cableCode,
+            buildCondition: buildCondition,
+            userOffset: userOffset,
+            userOffsetDistance: userOffsetDistance,
+            operator: operator,
+            comments: comments
+        }
+
+        return genp;
     }
 }

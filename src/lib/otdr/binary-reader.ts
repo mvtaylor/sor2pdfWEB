@@ -80,6 +80,12 @@ export class BinaryReader {
 		this.cursor += 1; // skip the null terminator
 		return value;
 	}
+
+	readChars(charCount: number): string {
+		const bytes = this.readBytes(charCount);
+		
+		return String.fromCharCode(...bytes);
+	}
 }
 
 export async function readerFromFile(file: File): Promise<BinaryReader> {
