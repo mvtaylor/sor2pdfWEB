@@ -1,3 +1,19 @@
+import type {MapBlock, GenParamsBlock, GenParamsParsed, SupParamsBlock, SupParamsParsed, FxdParamsBlock, FxdParamsParsed} from "./blocks";
+
+export interface RawBlocks {
+    mapBlock: MapBlock | null;
+    genParams: GenParamsBlock | null;
+    supParams: SupParamsBlock | null;
+    fxdParams: FxdParamsBlock | null;
+}
+
+export interface ParsedBlocks {
+    mapBlock: MapBlock | null;
+    genParams: GenParamsParsed | null;
+    supParams: SupParamsParsed | null;
+    fxdParams: FxdParamsParsed | null;
+}
+
 export const fiberTypes = {
     651: "ITU-T G.651 (multi-mode fiber)",
     652: "ITU-T G.652 (standard single-mode fiber)",

@@ -41,8 +41,33 @@ export interface GenParamsBlock {
     comments: string; 
 }
 
+export interface GenParamsParsed {
+    cableID: string;
+    fiberID: string;
+    fiberType: string; // SMF/MMF/etc.
+    wavelength: number;
+    locationA: string;
+    locationB: string;
+    cableCode: string;
+    buildCondition: string;
+    userOffset: number;
+    userOffsetDistance: number;
+    operator: string;
+    comments: string; 
+}
+
 
 export interface SupParamsBlock {
+    supplierName: string;
+    otdrName: string;
+    otdrSerialNumber: string;
+    moduleName: string;
+    moduleSerialNumber: string;
+    softwareVersion: string;
+    other: string;
+}
+
+export interface SupParamsParsed {
     supplierName: string;
     otdrName: string;
     otdrSerialNumber: string;
@@ -68,6 +93,34 @@ export interface FxdParamsBlock {
     numberPulseWidthEntries: number;
     pulseWidthEntries: PulseWidthEntry[];
     ioc: number;
+    backscatteringCoeff: number;
+    numberAverages: number;
+    averagingTime: number;
+    range: number;
+    acquisitionRangeDistance: number;
+    frontPanelOffset: number;
+    noiseFloorLevel: number;
+    noiseFloorScalingFactor: number;
+    powerOffsetFirstPoint: number;
+    lossThreshold: number;
+    reflectionThreshold: number;
+    endOfTransmissionThreshold: number;
+    traceType: string;
+    X1: number;
+    Y1: number;
+    X2: number;
+    Y2: number;
+}
+
+export interface FxdParamsParsed {
+    datetime: Date;
+    units: string;
+    wavelength: number;
+    acquisitionOffset: number;
+    acquisitionOffsetDistance: number;
+    numberPulseWidthEntries: number;
+    pulseWidthEntries: PulseWidthEntry[];
+    indexOfRefraction: number;
     backscatteringCoeff: number;
     numberAverages: number;
     averagingTime: number;

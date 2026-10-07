@@ -2,25 +2,38 @@
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
 import type { blockInfo, GenParamsBlock, MapBlock } from "./blocks";
+import type { ParsedBlocks, RawBlocks } from "./translation";
 
 export class ParsedSORFile {
     private br: BinaryReader;
     private offsets: Map<string, number>;
 
-    mapBlock: MapBlock;
-    generalParamsBlock: GenParamsBlock;
+    rawBlocks: RawBlocks;
+    parsedBlocks: ParsedBlocks;
 
     constructor(binaryReader: BinaryReader) {
         this.br = binaryReader;
-        this.mapBlock = this.parseMapBlock();
+        this.rawBlocks = {
+            mapBlock: null,
+            genParams: null,
+            supParams: null,
+            fxdParams: null
+        }
+        this.parsedBlocks = {
+            mapBlock: null,
+            genParams: null,
+            supParams: null,
+            fxdParams: null
+        }
+        this.rawBlocks.mapBlock = this.parseMapBlock();
         this.offsets = this.constructOffsets();
-        this.generalParamsBlock = this.parseGenParams();
+        this.rawBlocks.genParams = this.parseGenParams();
 
-        console.log(`${JSON.stringify(this.mapBlock)}`);
+        console.log(`${JSON.stringify(this.rawBlocks.mapBlock)}`);
         console.log("==============================================");
         console.log(`${JSON.stringify(Object.fromEntries(this.offsets))}`);
         console.log("==============================================");
-        console.log(`${JSON.stringify(this.generalParamsBlock)}`);
+        console.log(`${JSON.stringify(this.rawBlocks.genParams)}`);
     }
 
     parseMapBlock(): MapBlock {
@@ -87,13 +100,15 @@ export class ParsedSORFile {
 
         let offsets = new Map();
 
-        this.mapBlock.blockSizes.forEach((bInfo: blockInfo) => {
+        if (this.rawBlocks.mapBlock === null) throw new Error("Cannot construct offsets yet; map block null");
+
+        this.rawBlocks.mapBlock.blockSizes.forEach((bInfo: blockInfo) => {
             offsets.set(bInfo.blockName, running);
             running += bInfo.blockSize;
         });
 
         for (const blockKey of offsets.keys()) {
-            offsets.set(blockKey, offsets.get(blockKey)! + this.mapBlock.mapBlockSizeBytes);
+            offsets.set(blockKey, offsets.get(blockKey)! + this.rawBlocks.mapBlock.mapBlockSizeBytes);
         }
 
         return offsets;
