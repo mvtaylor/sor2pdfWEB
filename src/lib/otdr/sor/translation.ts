@@ -7,28 +7,28 @@ export interface RawBlocks {
     fxdParams: FxdParamsBlock | null;
 }
 
-export interface ParsedBlocks {
+export interface TranslatedBlocks {
     mapBlock: MapBlock | null;
     genParams: GenParamsTranslated | null;
     supParams: SupParamsTranslated | null;
     fxdParams: FxdParamsTranslated | null;
 }
 
-export const fiberTypes = {
+export const fiberTypes = new Map(Object.entries({
     651: "ITU-T G.651 (multi-mode fiber)",
     652: "ITU-T G.652 (standard single-mode fiber)",
     653: "ITU-T G.653 (dispersion-shifted fiber)",
     654: "ITU-T G.654 (1550nm loss-minimzed fiber)",
     655: "ITU-T G.655 (nonzero dispersion-shifted fiber)"
-};
+}));
 
 
-export const buildConditions = {
+export const buildConditions = new Map(Object.entries({
     "BC": "as-built",
     "CC": "as-current",
     "RC": "as-repaired",
     "OT": "other"
-}
+}));
 
 export const traceUnitsAbbrev = {
     "km": "km",
@@ -70,5 +70,33 @@ export class TranslationFunctions {
 }
 
 export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
+    let fiberTypeString = fiberTypes.get(rawGenP.fiberType.toString());
+    if (fiberTypeString === undefined) {
+        fiberTypeString = rawGenP.fiberType.toString();
+    }
+
+    let buildConditionString = buildConditions.get(rawGenP.buildCondition);
+    if (buildConditionString !== undefined) {
+        buildConditionString = `${rawGenP.buildCondition} (${buildConditionString})`;
+    } else {
+        buildConditionString = rawGenP.buildCondition;
+    }
+
     
+    const res: GenParamsTranslated = {
+        cableID: rawGenP.cableID,
+        fiberID: rawGenP.fiberID,
+        fiberType: fiberTypeString, // TODO: put in actual value
+        wavelength: rawGenP.wavelength,
+        locationA: rawGenP.locationA,
+        locationB: rawGenP.locationB,
+        cableCode: rawGenP.cableCode,
+        buildCondition: buildConditionString,
+        userOffset: rawGenP.userOffset,
+        userOffsetDistance: rawGenP.userOffsetDistance,
+        operator: rawGenP.operator,
+        comments: rawGenP.comments
+    }
+
+    return res;
 }

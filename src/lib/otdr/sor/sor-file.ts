@@ -2,14 +2,14 @@
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
 import type { blockInfo, GenParamsBlock, MapBlock } from "./blocks";
-import type { ParsedBlocks, RawBlocks } from "./translation";
+import { type TranslatedBlocks, type RawBlocks, translateGenParams } from "./translation";
 
 export class ParsedSORFile {
     private br: BinaryReader;
     private offsets: Map<string, number>;
 
     rawBlocks: RawBlocks;
-    parsedBlocks: ParsedBlocks;
+    translatedBlocks: TranslatedBlocks;
 
     constructor(binaryReader: BinaryReader) {
         this.br = binaryReader;
@@ -19,7 +19,7 @@ export class ParsedSORFile {
             supParams: null,
             fxdParams: null
         }
-        this.parsedBlocks = {
+        this.translatedBlocks = {
             mapBlock: null,
             genParams: null,
             supParams: null,
@@ -34,6 +34,12 @@ export class ParsedSORFile {
         console.log(`${JSON.stringify(Object.fromEntries(this.offsets))}`);
         console.log("==============================================");
         console.log(`${JSON.stringify(this.rawBlocks.genParams)}`);
+        
+        console.log("=".repeat(100));
+
+        this.translatedBlocks.genParams = translateGenParams(this.rawBlocks.genParams);
+
+        console.log(`Translated GenParams:\n${JSON.stringify(this.translatedBlocks.genParams)}`);
     }
 
     parseMapBlock(): MapBlock {
