@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, GenParamsBlock, MapBlock } from "./blocks";
+import type { blockInfo, GenParamsBlock, MapBlock, SupParamsBlock } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams } from "./translation";
 
 export class ParsedSORFile {
@@ -28,12 +28,15 @@ export class ParsedSORFile {
         this.rawBlocks.mapBlock = this.parseMapBlock();
         this.offsets = this.constructOffsets();
         this.rawBlocks.genParams = this.parseGenParams();
+        this.rawBlocks.supParams = this.parseSupParams();
 
         console.log(`${JSON.stringify(this.rawBlocks.mapBlock)}`);
         console.log("==============================================");
         console.log(`${JSON.stringify(Object.fromEntries(this.offsets))}`);
         console.log("==============================================");
         console.log(`${JSON.stringify(this.rawBlocks.genParams)}`);
+        console.log("==============================================");
+        console.log(JSON.stringify(this.rawBlocks.supParams));
         
         console.log("=".repeat(100));
 
@@ -163,5 +166,36 @@ export class ParsedSORFile {
         }
 
         return genp;
+    }
+
+    parseSupParams(): SupParamsBlock {
+        const blockStart = this.offsets.get("SupParams");
+        if (blockStart === undefined) throw new Error("Unable to get SupParams start byte");
+        this.br.seek(blockStart);
+
+        const blockName = this.br.readCString();
+        if (blockName !== "SupParams") throw new Error("Error encountered while parsing SupParams: block name is not SupParams");
+
+        const suppName = this.br.readCString();
+        const otdrName = this.br.readCString();
+        const otdrSN = this.br.readCString();
+
+        const modName = this.br.readCString();
+        const modSN = this.br.readCString();
+
+        const softwareVer = this.br.readCString();
+        const other = this.br.readCString();
+        
+        const res: SupParamsBlock = {
+            supplierName: suppName,
+            otdrName: otdrName,
+            otdrSerialNumber: otdrSN,
+            moduleName: modName,
+            moduleSerialNumber: modSN,
+            softwareVersion: softwareVer,
+            other: other
+        }
+
+        return res;
     }
 }
