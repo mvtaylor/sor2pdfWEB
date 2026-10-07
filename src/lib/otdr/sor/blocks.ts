@@ -41,7 +41,7 @@ export interface GenParamsBlock {
     comments: string; 
 }
 
-export interface GenParamsParsed {
+export interface GenParamsTranslated {
     cableID: string;
     fiberID: string;
     fiberType: string; // SMF/MMF/etc.
@@ -67,7 +67,7 @@ export interface SupParamsBlock {
     other: string;
 }
 
-export interface SupParamsParsed {
+export interface SupParamsTranslated {
     supplierName: string;
     otdrName: string;
     otdrSerialNumber: string;
@@ -112,7 +112,7 @@ export interface FxdParamsBlock {
     Y2: number;
 }
 
-export interface FxdParamsParsed {
+export interface FxdParamsTranslated {
     datetime: Date;
     units: string;
     wavelength: number;

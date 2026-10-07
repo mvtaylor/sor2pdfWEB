@@ -1,4 +1,4 @@
-import type {MapBlock, GenParamsBlock, GenParamsParsed, SupParamsBlock, SupParamsParsed, FxdParamsBlock, FxdParamsParsed} from "./blocks";
+import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated} from "./blocks";
 
 export interface RawBlocks {
     mapBlock: MapBlock | null;
@@ -9,9 +9,9 @@ export interface RawBlocks {
 
 export interface ParsedBlocks {
     mapBlock: MapBlock | null;
-    genParams: GenParamsParsed | null;
-    supParams: SupParamsParsed | null;
-    fxdParams: FxdParamsParsed | null;
+    genParams: GenParamsTranslated | null;
+    supParams: SupParamsTranslated | null;
+    fxdParams: FxdParamsTranslated | null;
 }
 
 export const fiberTypes = {
@@ -67,4 +67,8 @@ export class TranslationFunctions {
     static indexOfRefraction(iorInt: number): number {
         return 0; // temporary
     }
+}
+
+export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
+    
 }
