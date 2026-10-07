@@ -32,6 +32,7 @@ export class ParsedSORFile {
         const mapBlockSize = this.br.readUint32();
         const numBlocks = this.br.readUint16();
 
+/*         
         const blockSizes: blockInfo[] = blockStarters.slice(1, -1).map((starter) => {
             const blockName = this.br.readCString();
             if (blockName !== starter) {
@@ -50,7 +51,7 @@ export class ParsedSORFile {
 
             return res;
         });
-
+ */
         // TODO: new way of parsing out all the block infos
 
         const blockSizesNew = [];
@@ -75,7 +76,7 @@ export class ParsedSORFile {
             mapBlockSizeBytes: mapBlockSize,
             numberOfBlocks: numBlocks,
 
-            blockSizes: blockSizes
+            blockSizes: blockSizesNew
         };
 
         return res;
