@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, GenParamsBlock, MapBlock, SupParamsBlock } from "./blocks";
+import type { blockInfo, FxdParamsBlock, GenParamsBlock, MapBlock, SupParamsBlock } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams } from "./translation";
 
 export class ParsedSORFile {
@@ -197,5 +197,22 @@ export class ParsedSORFile {
         }
 
         return res;
+    }
+
+    parseFxdParams(): FxdParamsBlock {
+        const blockStart = this.offsets.get("FxdParams");
+        if (blockStart === undefined) throw new Error("Unable to get FxdParams start byte");
+        this.br.seek(blockStart);
+
+        const blockName = this.br.readCString();
+        if (blockName !== "FxdParams") throw new Error("Error encountered while parsing FxdParams: block name is not FxdParams");
+
+        const datetime = this.br.readUint32();
+        const units = this.br.readChars(2);
+        const wavelength = this.br.readUint16();
+        const acquisitionOffset = this.br.readInt32();
+        const acquisitionOffsetDistance = this.br.readInt32();
+
+        const numPulseWidthEntries = this.br.readInt16();
     }
 }
