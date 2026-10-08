@@ -46,6 +46,13 @@ export const traceUnitsExpanded = new Map(Object.entries({
     "mi": "miles"    
 }));
 
+export const traceTypes = new Map(Object.entries({
+    "ST": "standard trace",
+    "RT": "reverse trace",
+    "DT": "difference trace",
+    "RF": "reference"
+}));
+
 export const c0 = 299.792458; // in m/us
 
 export class TranslationFunctions {
@@ -142,6 +149,11 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
     const reflectionThreshold_dB = TranslationFunctions.reflectionThresholdDB(rawFxdP.reflectionThreshold);
     const endOfTransmissionThreshold_dB = TranslationFunctions.eotThresholdDB(rawFxdP.endOfTransmissionThreshold);
 
+    let traceTypeExpanded = traceTypes.get(rawFxdP.traceType);
+    if (traceTypeExpanded === undefined) {
+        traceTypeExpanded = rawFxdP.traceType;
+    }
+
     const res: FxdParamsTranslated = {
         datetime: dt,
         units: units,
@@ -163,11 +175,11 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         lossThreshold_dB: lossThreshold_dB,
         reflectionThreshold_dB: reflectionThreshold_dB,
         endOfTransmissionThreshold_dB: endOfTransmissionThreshold_dB,
-        traceType: "",
-        X1: 0,
-        Y1: 0,
-        X2: 0,
-        Y2: 0
+        traceType: traceTypeExpanded,
+        X1: rawFxdP.X1,
+        Y1: rawFxdP.Y1,
+        X2: rawFxdP.X2,
+        Y2: rawFxdP.Y2
     }
 
     return res;
