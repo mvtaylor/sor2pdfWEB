@@ -73,7 +73,9 @@ export class TranslationFunctions {
         return backScatterInt * (-0.1);
     }
 
-    static rangeKM()
+    static rangeKM(rangeInt: number): number {
+        return rangeInt*(2*10**-5);
+    }
 }
 
 export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
@@ -120,7 +122,9 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
 
     const ior = TranslationFunctions.indexOfRefraction(rawFxdP.indexOfRefraction);
 
-    const backscatteringCoeff = TranslationFunctions.backscatteringCoefficient(rawFxdP.backscatteringCoeff)
+    const backscatteringCoeff = TranslationFunctions.backscatteringCoefficient(rawFxdP.backscatteringCoeff);
+
+    const range_km = TranslationFunctions.rangeKM(rawFxdP.range);
 
     const res: FxdParamsTranslated = {
         datetime: dt,
@@ -134,7 +138,7 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         backscatteringCoeff_dB: backscatteringCoeff,
         numberAverages: rawFxdP.numberAverages,
         averagingTime_s: rawFxdP.averagingTime,
-        range: 0,
+        range_km: range_km,
         acquisitionRangeDistance: 0,
         frontPanelOffset: 0,
         noiseFloorLevel: 0,

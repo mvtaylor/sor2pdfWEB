@@ -124,7 +124,7 @@ export interface FxdParamsTranslated {
     backscatteringCoeff_dB: number;
     numberAverages: number;
     averagingTime_s: number;
-    range: number;
+    range_km: number;
     acquisitionRangeDistance: number;
     frontPanelOffset: number;
     noiseFloorLevel: number;
