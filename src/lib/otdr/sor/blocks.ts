@@ -190,3 +190,23 @@ export interface DataPtsBlock {
     
     traces: TraceData[];
 }
+
+
+export interface DataPoint {
+    distance_km: number;
+    distance_preferred: number;
+    attenuation_dB: number;
+}
+
+export interface TraceDataTranslated {
+    numberDataPointsInTrace: number;
+
+    dataPointPairs: DataPoint[];
+}
+
+export interface DataPtsTranslated {
+    numberDataPoints: number;
+    numberTraces: number;
+
+    traces: TraceDataTranslated[];
+}
