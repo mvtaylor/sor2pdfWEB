@@ -244,6 +244,25 @@ export class ParsedSORFile {
 
         const range = this.br.readUint32();
 
+        const acquisitionRangeDistance = this.br.readInt32();
+        const frontPanelOffset = this.br.readInt32();
+
+        const noiseFloorLevel = this.br.readInt16(); // not sure if signed/unsigned
+        const noiseFloorScalingFactor = this.br.readInt16();
+
+        const powerOffsetFirstPoint = this.br.readInt16(); // not sure if signed/unsigned
+
+        const lossThreshold = this.br.readUint16();
+        const reflectionThreshold = this.br.readUint16();
+        const endOfTransmissionThreshold = this.br.readUint16();
+
+        const traceType = this.br.readChars(2);
+
+        const x1 = this.br.readInt32();
+        const y1 = this.br.readInt32();
+        const x2 = this.br.readInt32();
+        const y2 = this.br.readInt32();
+
         const res: FxdParamsBlock = {
             datetime: datetime,
             units: units,
@@ -257,20 +276,19 @@ export class ParsedSORFile {
             numberAverages: numAvgs,
             averagingTime: avgingTime,
             range: range,
-
-            acquisitionRangeDistance: 1,
-            frontPanelOffset: 1,
-            noiseFloorLevel: 1,
-            noiseFloorScalingFactor: 1,
-            powerOffsetFirstPoint: 1,
-            lossThreshold: 1,
-            reflectionThreshold: 1,
-            endOfTransmissionThreshold: 1,
-            traceType: "",
-            X1: 1,
-            Y1: 1,
-            X2: 1,
-            Y2: 1
+            acquisitionRangeDistance: acquisitionRangeDistance,
+            frontPanelOffset: frontPanelOffset,
+            noiseFloorLevel: noiseFloorLevel,
+            noiseFloorScalingFactor: noiseFloorScalingFactor,
+            powerOffsetFirstPoint: powerOffsetFirstPoint,
+            lossThreshold: lossThreshold,
+            reflectionThreshold: reflectionThreshold,
+            endOfTransmissionThreshold: endOfTransmissionThreshold,
+            traceType: traceType,
+            X1: x1,
+            Y1: y1,
+            X2: x2,
+            Y2: y2
         }
 
         return res;
