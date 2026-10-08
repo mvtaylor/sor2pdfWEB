@@ -104,7 +104,7 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
 export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated {
     const dt: Date = TranslationFunctions.datetime(rawFxdP.datetime);
 
-    let units = traceUnitsAbbrev.get(rawFxdP.units);
+    let units = traceUnitsAbbrev.get(rawFxdP.units); // maybe change to full unit name, or combine full name and abbrev
     if (units === undefined) {
         units = rawFxdP.units;
     }
@@ -140,4 +140,6 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         X2: 0,
         Y2: 0
     }
+
+    return res;
 }

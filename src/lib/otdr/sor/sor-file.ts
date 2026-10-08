@@ -2,7 +2,7 @@
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
 import type { blockInfo, FxdParamsBlock, GenParamsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
-import { type TranslatedBlocks, type RawBlocks, translateGenParams } from "./translation";
+import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams } from "./translation";
 
 export class ParsedSORFile {
     private br: BinaryReader;
@@ -44,8 +44,11 @@ export class ParsedSORFile {
         console.log("=".repeat(100));
 
         this.translatedBlocks.genParams = translateGenParams(this.rawBlocks.genParams);
+        this.translatedBlocks.fxdParams = translateFxdParams(this.rawBlocks.fxdParams);
 
         console.log(`Translated GenParams:\n${JSON.stringify(this.translatedBlocks.genParams)}`);
+        console.log("=".repeat(10));
+        console.log(`Translated FxdParams:\n${JSON.stringify(this.translatedBlocks.fxdParams)}`);
     }
 
     parseMapBlock(): MapBlock {
