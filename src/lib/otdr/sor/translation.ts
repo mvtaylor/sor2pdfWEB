@@ -65,8 +65,15 @@ export class TranslationFunctions {
     }
 
     static indexOfRefraction(iorInt: number): number {
-        return 0; // temporary
+        return iorInt/(10**5); // temporary
     }
+
+    static backscatteringCoefficient(backScatterInt: number): number {
+        // returns in units of dB
+        return backScatterInt * (-0.1);
+    }
+
+    static rangeKM()
 }
 
 export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
@@ -113,6 +120,8 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
 
     const ior = TranslationFunctions.indexOfRefraction(rawFxdP.indexOfRefraction);
 
+    const backscatteringCoeff = TranslationFunctions.backscatteringCoefficient(rawFxdP.backscatteringCoeff)
+
     const res: FxdParamsTranslated = {
         datetime: dt,
         units: units,
@@ -122,9 +131,9 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         numberPulseWidthEntries: rawFxdP.numberPulseWidthEntries,
         pulseWidthEntries: rawFxdP.pulseWidthEntries,
         indexOfRefraction: ior,
-        backscatteringCoeff: 0,
-        numberAverages: 0,
-        averagingTime: 0,
+        backscatteringCoeff_dB: backscatteringCoeff,
+        numberAverages: rawFxdP.numberAverages,
+        averagingTime_s: rawFxdP.averagingTime,
         range: 0,
         acquisitionRangeDistance: 0,
         frontPanelOffset: 0,

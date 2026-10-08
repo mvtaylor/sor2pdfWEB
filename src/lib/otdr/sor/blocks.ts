@@ -121,9 +121,9 @@ export interface FxdParamsTranslated {
     numberPulseWidthEntries: number;
     pulseWidthEntries: PulseWidthEntry[];
     indexOfRefraction: number;
-    backscatteringCoeff: number;
+    backscatteringCoeff_dB: number;
     numberAverages: number;
-    averagingTime: number;
+    averagingTime_s: number;
     range: number;
     acquisitionRangeDistance: number;
     frontPanelOffset: number;
