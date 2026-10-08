@@ -174,3 +174,18 @@ export interface KeyEventsBlock {
     fiberStartPosition2: number; // usually a repeat
     fiberLength2: number; // usually a repeat
 }
+
+
+export interface TraceData {
+    numberDataPointsInTrace: number;
+    scalingFactor: number; // almost always 1000
+
+    dataPoints: number[]; // to get dB, multiply by (-1)*(scalingFactor)*(10^-6) 
+}
+
+export interface DataPtsBlock {
+    numberDataPoints: number;
+    numberTraces: number;
+    
+    traces: TraceData[];
+}
