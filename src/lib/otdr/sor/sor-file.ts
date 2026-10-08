@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, FxdParamsBlock, GenParamsBlock, MapBlock, SupParamsBlock } from "./blocks";
+import type { blockInfo, FxdParamsBlock, GenParamsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams } from "./translation";
 
 export class ParsedSORFile {
@@ -29,6 +29,7 @@ export class ParsedSORFile {
         this.offsets = this.constructOffsets();
         this.rawBlocks.genParams = this.parseGenParams();
         this.rawBlocks.supParams = this.parseSupParams();
+        this.rawBlocks.fxdParams = this.parseFxdParams();
 
         console.log(`${JSON.stringify(this.rawBlocks.mapBlock)}`);
         console.log("==============================================");
@@ -37,6 +38,8 @@ export class ParsedSORFile {
         console.log(`${JSON.stringify(this.rawBlocks.genParams)}`);
         console.log("==============================================");
         console.log(JSON.stringify(this.rawBlocks.supParams));
+        console.log("==============================================");
+        console.log(JSON.stringify(this.rawBlocks.fxdParams));
         
         console.log("=".repeat(100));
 
@@ -214,5 +217,62 @@ export class ParsedSORFile {
         const acquisitionOffsetDistance = this.br.readInt32();
 
         const numPulseWidthEntries = this.br.readInt16();
+
+        const pwEntries: PulseWidthEntry[] = [];
+
+        for (let i = 0; i < numPulseWidthEntries; i++) {
+            const pulseWidth = this.br.readUint16();
+            const sampleSpacing = this.br.readUint32();
+            const numDataPts = this.br.readUint32();
+
+            const pwEntry: PulseWidthEntry = {
+                pulseWidth: pulseWidth,
+                sampleSpacing: sampleSpacing,
+                numberDataPointsTrace: numDataPts
+            }
+
+            pwEntries.push(pwEntry);
+        }
+
+        const ior = this.br.readUint32();
+
+        const backscatteringCoeff = this.br.readUint16();
+
+        const numAvgs = this.br.readUint32();
+
+        const avgingTime = this.br.readUint16();
+
+        const range = this.br.readUint32();
+
+        const res: FxdParamsBlock = {
+            datetime: datetime,
+            units: units,
+            wavelength: wavelength,
+            acquisitionOffset: acquisitionOffset,
+            acquisitionOffsetDistance: acquisitionOffsetDistance,
+            numberPulseWidthEntries: numPulseWidthEntries,
+            pulseWidthEntries: pwEntries,
+            indexOfRefraction: ior,
+            backscatteringCoeff: backscatteringCoeff,
+            numberAverages: numAvgs,
+            averagingTime: avgingTime,
+            range: range,
+
+            acquisitionRangeDistance: 1,
+            frontPanelOffset: 1,
+            noiseFloorLevel: 1,
+            noiseFloorScalingFactor: 1,
+            powerOffsetFirstPoint: 1,
+            lossThreshold: 1,
+            reflectionThreshold: 1,
+            endOfTransmissionThreshold: 1,
+            traceType: "",
+            X1: 1,
+            Y1: 1,
+            X2: 1,
+            Y2: 1
+        }
+
+        return res;
     }
 }

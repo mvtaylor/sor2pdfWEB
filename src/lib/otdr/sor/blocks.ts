@@ -78,7 +78,7 @@ export interface SupParamsTranslated {
 }
 
 
-interface PulseWidthEntry {
+export interface PulseWidthEntry {
     pulseWidth: number; // in ns
     sampleSpacing: number; // in 0.01 ps
     numberDataPointsTrace: number;
@@ -92,7 +92,7 @@ export interface FxdParamsBlock {
     acquisitionOffsetDistance: number;
     numberPulseWidthEntries: number;
     pulseWidthEntries: PulseWidthEntry[];
-    ioc: number;
+    indexOfRefraction: number;
     backscatteringCoeff: number;
     numberAverages: number;
     averagingTime: number;
