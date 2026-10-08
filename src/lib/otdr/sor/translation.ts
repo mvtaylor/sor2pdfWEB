@@ -1,10 +1,12 @@
-import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated} from "./blocks";
+import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock} from "./blocks";
 
 export interface RawBlocks {
     mapBlock: MapBlock | null;
     genParams: GenParamsBlock | null;
     supParams: SupParamsBlock | null;
     fxdParams: FxdParamsBlock | null;
+    keyEvents: KeyEventsBlock | null;
+    dataPts: DataPtsBlock | null;
 }
 
 export interface TranslatedBlocks {

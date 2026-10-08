@@ -17,7 +17,9 @@ export class ParsedSORFile {
             mapBlock: null,
             genParams: null,
             supParams: null,
-            fxdParams: null
+            fxdParams: null,
+            keyEvents: null,
+            dataPts: null
         }
         this.translatedBlocks = {
             mapBlock: null,
@@ -30,6 +32,7 @@ export class ParsedSORFile {
         this.rawBlocks.genParams = this.parseGenParams();
         this.rawBlocks.supParams = this.parseSupParams();
         this.rawBlocks.fxdParams = this.parseFxdParams();
+        this.rawBlocks.keyEvents = this.parseKeyEvents();
 
         console.log(`${JSON.stringify(this.rawBlocks.mapBlock)}`);
         console.log("==============================================");
@@ -40,6 +43,8 @@ export class ParsedSORFile {
         console.log(JSON.stringify(this.rawBlocks.supParams));
         console.log("==============================================");
         console.log(JSON.stringify(this.rawBlocks.fxdParams));
+        console.log("==============================================");
+        console.log(JSON.stringify(this.rawBlocks.keyEvents));
         
         console.log("=".repeat(100));
 
