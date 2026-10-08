@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, DataPtsBlock, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
+import type { blockInfo, DataPtsBlock, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock, TraceData } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams } from "./translation";
 
 export class ParsedSORFile {
@@ -33,6 +33,7 @@ export class ParsedSORFile {
         this.rawBlocks.supParams = this.parseSupParams();
         this.rawBlocks.fxdParams = this.parseFxdParams();
         this.rawBlocks.keyEvents = this.parseKeyEvents();
+        this.rawBlocks.dataPts = this.parseDataPts();
 
         console.log(`${JSON.stringify(this.rawBlocks.mapBlock)}`);
         console.log("==============================================");
@@ -45,6 +46,8 @@ export class ParsedSORFile {
         console.log(JSON.stringify(this.rawBlocks.fxdParams));
         console.log("==============================================");
         console.log(JSON.stringify(this.rawBlocks.keyEvents));
+        console.log("==============================================");
+        console.log(JSON.stringify(this.rawBlocks.dataPts));
         
         console.log("=".repeat(100));
 
@@ -381,10 +384,36 @@ export class ParsedSORFile {
         const blockName = this.br.readCString();
         if (blockName !== "DataPts") throw new Error("Error encountered while parsing DataPts: block name is not DataPts");
 
+        const numberDataPoints = this.br.readUint32();
+        const numberTraces = this.br.readUint16();
+
+        const traces: TraceData[] = [];
+
+        for (let i = 0; i < numberTraces; i++) {
+
+            const numberDataPointsInTrace = this.br.readUint32();
+            const scalingFactor = this.br.readUint16();
+
+            const traceDataPoints: number[] = [];
+
+            for (let j = 0; j < numberDataPointsInTrace; j++) {
+                const dataPt = this.br.readUint16();
+                traceDataPoints.push(dataPt);
+            }
+
+            const traceInfo: TraceData = {
+                numberDataPointsInTrace: numberDataPointsInTrace,
+                scalingFactor: scalingFactor,
+                dataPoints: traceDataPoints
+            }
+
+            traces.push(traceInfo);
+        }
+
         const res: DataPtsBlock = {
-            numberDataPoints: 0,
-            numberTraces: 0,
-            traces: []
+            numberDataPoints: numberDataPoints,
+            numberTraces: numberTraces,
+            traces: traces
         }
 
         return res;
