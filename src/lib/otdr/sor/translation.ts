@@ -1,4 +1,4 @@
-import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated} from "./blocks";
+import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated} from "./blocks";
 
 export interface RawBlocks {
     mapBlock: MapBlock | null;
@@ -95,6 +95,17 @@ export class TranslationFunctions {
     static reflectionThresholdDB(reflectionThresholdInt: number): number {
         return reflectionThresholdInt * -0.001;
     }
+
+    static sampleSpacingM(sampleSpacingInt: number, ior: number): number {
+        // Input is in units of 0.01 ps
+        // Return units of meters
+        // dist = time * c/IOR
+        
+        // We first convert the sample spacing from units of 0.01 ps to microseconds (us) by multiplying by 10^-8
+        // then multiply by the speed of light, c, in units of m/us
+        // then divide by the IOR
+        return sampleSpacingInt * c0/ior * (10**-8);
+    }
 }
 
 export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
@@ -154,6 +165,21 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         traceTypeExpanded = rawFxdP.traceType;
     }
 
+    const translatedPWEntries: PulseWidthEntryTranslated[] = [];
+
+    for (let i = 0; i < rawFxdP.pulseWidthEntries.length; i++) {
+        const pwEntry = rawFxdP.pulseWidthEntries[i];
+
+        const translatedPWEntry: PulseWidthEntryTranslated = {
+            pulseWidth: pwEntry.pulseWidth,
+            sampleSpacing: pwEntry.sampleSpacing,
+            sampleSpacing_m: TranslationFunctions.sampleSpacingM(pwEntry.sampleSpacing, ior),
+            numberDataPointsTrace: pwEntry.numberDataPointsTrace
+        }
+
+        translatedPWEntries.push(translatedPWEntry);
+    }
+
     const res: FxdParamsTranslated = {
         datetime: dt,
         units: units,
@@ -161,7 +187,7 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         acquisitionOffset: rawFxdP.acquisitionOffset,
         acquisitionOffsetDistance: rawFxdP.acquisitionOffsetDistance,
         numberPulseWidthEntries: rawFxdP.numberPulseWidthEntries,
-        pulseWidthEntries: rawFxdP.pulseWidthEntries,
+        pulseWidthEntries: translatedPWEntries,
         indexOfRefraction: ior,
         backscatteringCoeff_dB: backscatteringCoeff,
         numberAverages: rawFxdP.numberAverages,

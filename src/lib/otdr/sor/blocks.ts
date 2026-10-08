@@ -112,6 +112,13 @@ export interface FxdParamsBlock {
     Y2: number;
 }
 
+export interface PulseWidthEntryTranslated {
+    pulseWidth: number; // in ns
+    sampleSpacing: number; // in 0.01 ps
+    sampleSpacing_m: number; // in meters
+    numberDataPointsTrace: number;
+}
+
 export interface FxdParamsTranslated {
     datetime: Date;
     units: string;
@@ -119,7 +126,7 @@ export interface FxdParamsTranslated {
     acquisitionOffset: number;
     acquisitionOffsetDistance: number;
     numberPulseWidthEntries: number;
-    pulseWidthEntries: PulseWidthEntry[];
+    pulseWidthEntries: PulseWidthEntryTranslated[];
     indexOfRefraction: number;
     backscatteringCoeff_dB: number;
     numberAverages: number;
