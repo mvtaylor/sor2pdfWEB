@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, FxdParamsBlock, GenParamsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
+import type { blockInfo, FxdParamsBlock, GenParamsBlock, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams } from "./translation";
 
 export class ParsedSORFile {
@@ -292,6 +292,41 @@ export class ParsedSORFile {
             Y1: y1,
             X2: x2,
             Y2: y2
+        }
+
+        return res;
+    }
+
+    parseKeyEvents(): KeyEventsBlock {
+        const blockStart = this.offsets.get("KeyEvents");
+        if (blockStart === undefined) throw new Error("Unable to get KeyEvents start byte");
+        this.br.seek(blockStart);
+
+        const blockName = this.br.readCString();
+        if (blockName !== "KeyEvents") throw new Error("Error encountered while parsing KeyEvents: block name is not KeyEvents");
+
+        const numEvents = this.br.readUint16();
+
+        // Get key events
+
+        // end
+
+        const totalLoss = this.br.readInt32();
+        const fiberStartPos = this.br.readInt32();
+        const fiberLen = this.br.readUint32();
+        const orl = this.br.readUint16();
+        const fiberStartPos2 = this.br.readInt32();
+        const fiberLen2 = this.br.readUint32();
+
+        const res: KeyEventsBlock = {
+            numberOfEvents: 0,
+            keyEvents: [],
+            totalLoss: totalLoss,
+            fiberStartPosition: fiberStartPos,
+            fiberLength: fiberLen,
+            opticalReturnLoss: orl,
+            fiberStartPosition2: fiberStartPos2,
+            fiberLength2: fiberLen2
         }
 
         return res;

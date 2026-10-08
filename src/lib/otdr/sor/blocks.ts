@@ -160,6 +160,7 @@ export interface KeyEvent {
     endOfCurrentEvent: number; // time-of-travel in units of 0.1 ns
     beginningOfNextEvent: number; // time-of-travel in units of 0.1 ns; equals range if last event
     peakPointCurrentEvent: number;
+    comments: string;
 }
 
 
