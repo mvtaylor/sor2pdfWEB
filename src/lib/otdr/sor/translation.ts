@@ -30,21 +30,21 @@ export const buildConditions = new Map(Object.entries({
     "OT": "other"
 }));
 
-export const traceUnitsAbbrev = {
+export const traceUnitsAbbrev = new Map(Object.entries({
     "km": "km",
     "mt": "m",
     "ft": "ft",
     "kf": "kft",
     "mi": "mi"
-}
+}));
 
-export const traceUnitsExpanded = {
+export const traceUnitsExpanded = new Map(Object.entries({
     "km": "kilometers",
     "mt": "meters",
     "ft": "feet",
     "kf": "kilo-feet",
     "mi": "miles"    
-}
+}));
 
 export const c0 = 299.792458; // in m/us
 
@@ -99,4 +99,45 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
     }
 
     return res;
+}
+
+export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated {
+    const dt: Date = TranslationFunctions.datetime(rawFxdP.datetime);
+
+    let units = traceUnitsAbbrev.get(rawFxdP.units);
+    if (units === undefined) {
+        units = rawFxdP.units;
+    }
+
+    const wavelength = TranslationFunctions.wavelength(rawFxdP.wavelength);
+
+    const ior = TranslationFunctions.indexOfRefraction(rawFxdP.indexOfRefraction);
+
+    const res: FxdParamsTranslated = {
+        datetime: dt,
+        units: units,
+        wavelength: wavelength,
+        acquisitionOffset: rawFxdP.acquisitionOffset,
+        acquisitionOffsetDistance: rawFxdP.acquisitionOffsetDistance,
+        numberPulseWidthEntries: rawFxdP.numberPulseWidthEntries,
+        pulseWidthEntries: rawFxdP.pulseWidthEntries,
+        indexOfRefraction: ior,
+        backscatteringCoeff: 0,
+        numberAverages: 0,
+        averagingTime: 0,
+        range: 0,
+        acquisitionRangeDistance: 0,
+        frontPanelOffset: 0,
+        noiseFloorLevel: 0,
+        noiseFloorScalingFactor: 0,
+        powerOffsetFirstPoint: 0,
+        lossThreshold: 0,
+        reflectionThreshold: 0,
+        endOfTransmissionThreshold: 0,
+        traceType: "",
+        X1: 0,
+        Y1: 0,
+        X2: 0,
+        Y2: 0
+    }
 }
