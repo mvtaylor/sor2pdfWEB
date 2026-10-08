@@ -130,9 +130,9 @@ export interface FxdParamsTranslated {
     noiseFloorLevel: number;
     noiseFloorScalingFactor: number;
     powerOffsetFirstPoint: number;
-    lossThreshold: number;
-    reflectionThreshold: number;
-    endOfTransmissionThreshold: number;
+    lossThreshold_dB: number;
+    reflectionThreshold_dB: number;
+    endOfTransmissionThreshold_dB: number;
     traceType: string;
     X1: number;
     Y1: number;

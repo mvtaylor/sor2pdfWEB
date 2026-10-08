@@ -76,6 +76,18 @@ export class TranslationFunctions {
     static rangeKM(rangeInt: number): number {
         return rangeInt*(2*10**-5);
     }
+
+    static lossThresholdDB(lossThresholdInt: number): number {
+        return lossThresholdInt * 0.001;
+    }
+
+    static eotThresholdDB(eotThresholdInt: number): number {
+        return eotThresholdInt * 0.001;
+    }
+
+    static reflectionThresholdDB(reflectionThresholdInt: number): number {
+        return reflectionThresholdInt * -0.001;
+    }
 }
 
 export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
@@ -126,6 +138,10 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
 
     const range_km = TranslationFunctions.rangeKM(rawFxdP.range);
 
+    const lossThreshold_dB = TranslationFunctions.lossThresholdDB(rawFxdP.lossThreshold);
+    const reflectionThreshold_dB = TranslationFunctions.reflectionThresholdDB(rawFxdP.reflectionThreshold);
+    const endOfTransmissionThreshold_dB = TranslationFunctions.eotThresholdDB(rawFxdP.endOfTransmissionThreshold);
+
     const res: FxdParamsTranslated = {
         datetime: dt,
         units: units,
@@ -139,14 +155,14 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         numberAverages: rawFxdP.numberAverages,
         averagingTime_s: rawFxdP.averagingTime,
         range_km: range_km,
-        acquisitionRangeDistance: 0,
-        frontPanelOffset: 0,
-        noiseFloorLevel: 0,
-        noiseFloorScalingFactor: 0,
-        powerOffsetFirstPoint: 0,
-        lossThreshold: 0,
-        reflectionThreshold: 0,
-        endOfTransmissionThreshold: 0,
+        acquisitionRangeDistance: rawFxdP.acquisitionRangeDistance,
+        frontPanelOffset: rawFxdP.frontPanelOffset,
+        noiseFloorLevel: rawFxdP.noiseFloorLevel,
+        noiseFloorScalingFactor: rawFxdP.noiseFloorScalingFactor,
+        powerOffsetFirstPoint: rawFxdP.powerOffsetFirstPoint,
+        lossThreshold_dB: lossThreshold_dB,
+        reflectionThreshold_dB: reflectionThreshold_dB,
+        endOfTransmissionThreshold_dB: endOfTransmissionThreshold_dB,
         traceType: "",
         X1: 0,
         Y1: 0,
