@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
+import type { blockInfo, DataPtsBlock, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams } from "./translation";
 
 export class ParsedSORFile {
@@ -368,6 +368,23 @@ export class ParsedSORFile {
             opticalReturnLoss: orl,
             fiberStartPosition2: fiberStartPos2,
             fiberLength2: fiberLen2
+        }
+
+        return res;
+    }
+
+    parseDataPts(): DataPtsBlock {
+        const blockStart = this.offsets.get("DataPts");
+        if (blockStart === undefined) throw new Error("Unable to get DataPts start byte");
+        this.br.seek(blockStart);
+
+        const blockName = this.br.readCString();
+        if (blockName !== "DataPts") throw new Error("Error encountered while parsing DataPts: block name is not DataPts");
+
+        const res: DataPtsBlock = {
+            numberDataPoints: 0,
+            numberTraces: 0,
+            traces: []
         }
 
         return res;
