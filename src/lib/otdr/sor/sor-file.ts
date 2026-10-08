@@ -1,7 +1,7 @@
 
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
-import type { blockInfo, FxdParamsBlock, GenParamsBlock, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
+import type { blockInfo, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock } from "./blocks";
 import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams } from "./translation";
 
 export class ParsedSORFile {
@@ -309,6 +309,42 @@ export class ParsedSORFile {
 
         // Get key events
 
+        const allKeyEvents: KeyEvent[] = [];
+
+        for (let i = 0; i < numEvents; i++) {
+            const eventNumber = this.br.readUint16();
+            const timeOfTravel = this.br.readUint32();
+            const slope = this.br.readInt16();
+            const spliceLoss = this.br.readInt16();
+            const reflectionLoss = this.br.readInt32();
+            const eventType = this.br.readChars(8);
+
+            const endOfPreviousEvent = this.br.readUint32();
+            const beginningOfCurrentEvent = this.br.readUint32();
+            const endOfCurrentEvent = this.br.readUint32();
+            const beginningOfNextEvent = this.br.readUint32();
+            const peakPointCurrentEvent = this.br.readUint32();
+            
+            const comments = this.br.readCString();
+
+            const newKeyEvent: KeyEvent = {
+                eventNumber: eventNumber,
+                timeOfTravel: timeOfTravel,
+                slope: slope,
+                spliceLoss: spliceLoss,
+                reflectionLoss: reflectionLoss,
+                eventType: eventType,
+                endOfPreviousEvent: endOfPreviousEvent,
+                beginningOfCurrentEvent: beginningOfCurrentEvent,
+                endOfCurrentEvent: endOfCurrentEvent,
+                beginningOfNextEvent: beginningOfNextEvent,
+                peakPointCurrentEvent: peakPointCurrentEvent,
+                comments: comments
+            }
+
+            allKeyEvents.push(newKeyEvent);
+        }
+
         // end
 
         const totalLoss = this.br.readInt32();
@@ -320,7 +356,7 @@ export class ParsedSORFile {
 
         const res: KeyEventsBlock = {
             numberOfEvents: 0,
-            keyEvents: [],
+            keyEvents: allKeyEvents,
             totalLoss: totalLoss,
             fiberStartPosition: fiberStartPos,
             fiberLength: fiberLen,
