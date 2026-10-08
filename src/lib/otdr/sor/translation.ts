@@ -145,9 +145,10 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
 export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated {
     const dt: Date = TranslationFunctions.datetime(rawFxdP.datetime);
 
-    let units = traceUnitsAbbrev.get(rawFxdP.units); // maybe change to full unit name, or combine full name and abbrev
-    if (units === undefined) {
-        units = rawFxdP.units;
+    const unitsFull = traceUnitsExpanded.get(rawFxdP.units);
+    let units = rawFxdP.units;
+    if (unitsFull !== undefined) {
+        units = `${units} (${unitsFull})`;
     }
 
     const wavelength = TranslationFunctions.wavelength(rawFxdP.wavelength);
@@ -185,7 +186,7 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
     const res: FxdParamsTranslated = {
         datetime: dt,
         units: units,
-        wavelength: wavelength,
+        wavelength_nm: wavelength,
         acquisitionOffset: rawFxdP.acquisitionOffset,
         acquisitionOffsetDistance: rawFxdP.acquisitionOffsetDistance,
         numberPulseWidthEntries: rawFxdP.numberPulseWidthEntries,

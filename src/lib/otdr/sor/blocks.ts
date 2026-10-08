@@ -122,7 +122,7 @@ export interface PulseWidthEntryTranslated {
 export interface FxdParamsTranslated {
     datetime: Date;
     units: string;
-    wavelength: number;
+    wavelength_nm: number;
     acquisitionOffset: number;
     acquisitionOffsetDistance: number;
     numberPulseWidthEntries: number;
