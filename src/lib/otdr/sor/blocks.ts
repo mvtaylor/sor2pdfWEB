@@ -146,3 +146,31 @@ export interface FxdParamsTranslated {
     X2: number;
     Y2: number;
 }
+
+
+export interface KeyEvent {
+    eventNumber: number; // starting from 1
+    timeOfTravel: number; // units of 0.1 ns
+    slope: number; // dB/km
+    spliceLoss: number; // dB
+    reflectionLoss: number; // dB
+    eventType: string; // form nx9999LS
+    endOfPreviousEvent: number; // time-of-travel in units of 0.1 ns
+    beginningOfCurrentEvent: number; // time-of-travel in units of 0.1 ns
+    endOfCurrentEvent: number; // time-of-travel in units of 0.1 ns
+    beginningOfNextEvent: number; // time-of-travel in units of 0.1 ns; equals range if last event
+    peakPointCurrentEvent: number;
+}
+
+
+export interface KeyEventsBlock {
+    numberOfEvents: number;
+    keyEvents: KeyEvent[];
+
+    totalLoss: number; // in units of 0.001 dB
+    fiberStartPosition: number; // distance in units of 0.1 ns
+    fiberLength: number; // distance in units of 0.1 ns
+    opticalReturnLoss: number; // in units of 0.001 dB
+    fiberStartPosition2: number; // usually a repeat
+    fiberLength2: number; // usually a repeat
+}
