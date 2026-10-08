@@ -360,7 +360,7 @@ export class ParsedSORFile {
         const fiberLen2 = this.br.readUint32();
 
         const res: KeyEventsBlock = {
-            numberOfEvents: 0,
+            numberOfEvents: numEvents,
             keyEvents: allKeyEvents,
             totalLoss: totalLoss,
             fiberStartPosition: fiberStartPos,
