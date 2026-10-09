@@ -219,15 +219,14 @@ function translateTraceData(traceData: TraceData, sampleSpacing_m: number): Trac
     const dtpts: DataPointTranslated[] = [];
 
     for (let i = 0; i < traceData.dataPoints.length; i++) {
-        const x = i*sampleSpacing_m/1000; // convert to km
+        const x = i*sampleSpacing_m;
         
         const rawReading = traceData.dataPoints[i];
 
         const y = rawReading*(-traceData.scalingFactor)*(10**-6);
 
         const newPt: DataPointTranslated = {
-            distance_km: x,
-            distance_preferred: x,
+            distance_m: x,
             attenuation_dB: y
         }
 

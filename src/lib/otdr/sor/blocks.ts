@@ -193,8 +193,7 @@ export interface DataPtsBlock {
 
 
 export interface DataPointTranslated {
-    distance_km: number;
-    distance_preferred: number;
+    distance_m: number;
     attenuation_dB: number;
 }
 
