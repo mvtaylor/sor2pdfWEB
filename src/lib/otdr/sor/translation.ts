@@ -1,4 +1,4 @@
-import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock, DataPtsTranslated, TraceData, TraceDataTranslated, DataPointTranslated, KeyEventsTranslated} from "./blocks";
+import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock, DataPtsTranslated, TraceData, TraceDataTranslated, DataPointTranslated, KeyEventsTranslated, KeyEvent, KeyEventTranslated} from "./blocks";
 
 export interface RawBlocks {
     mapBlock: MapBlock | null;
@@ -219,6 +219,32 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
     return res;
 }
 
+function decodeEventType(eventType: string): string {
+    return ""; // TODO: placeholder
+}
+
+
+function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated {
+
+    
+    const res: KeyEventTranslated = {
+        eventNumber: keyEvent.eventNumber,
+        timeOfTravel: TranslationFunctions.timeOfTravelM(keyEvent.timeOfTravel, ior),
+        slope: keyEvent.slope * 0.001,
+        spliceLoss: keyEvent.spliceLoss * 0.001,
+        reflectionLoss: keyEvent.reflectionLoss * 0.001,
+        eventType: decodeEventType(keyEvent.eventType),
+        endOfPreviousEvent: TranslationFunctions.timeOfTravelM(keyEvent.endOfPreviousEvent, ior),
+        beginningOfCurrentEvent: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfCurrentEvent, ior),
+        endOfCurrentEvent: TranslationFunctions.timeOfTravelM(keyEvent.endOfCurrentEvent, ior),
+        beginningOfNextEvent: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfNextEvent, ior),
+        peakPointCurrentEvent: TranslationFunctions.timeOfTravelM(keyEvent.peakPointCurrentEvent, ior),
+        comments: keyEvent.comments
+    }
+
+    return res;
+}
+
 
 export function translateKeyEvents(rawKeyEvents: KeyEventsBlock, trFxdParams: FxdParamsTranslated): KeyEventsTranslated {
 
@@ -227,10 +253,17 @@ export function translateKeyEvents(rawKeyEvents: KeyEventsBlock, trFxdParams: Fx
 
     const fiberStartPos2 = TranslationFunctions.timeOfTravelM(rawKeyEvents.fiberStartPosition2, trFxdParams.indexOfRefraction);
     const fiberLen2 = TranslationFunctions.timeOfTravelM(rawKeyEvents.fiberLength2, trFxdParams.indexOfRefraction);
+
+    const trKeyEvents: KeyEventTranslated[] = [];
+
+    for (let i = 0; i < rawKeyEvents.keyEvents.length; i++) {
+        const trKE = translateKeyEvent(rawKeyEvents.keyEvents[i], trFxdParams.indexOfRefraction);
+        trKeyEvents.push(trKE);
+    }
     
     const res: KeyEventsTranslated = {
         numberOfEvents: rawKeyEvents.numberOfEvents,
-        keyEvents: [],
+        keyEvents: trKeyEvents,
         totalLoss: rawKeyEvents.totalLoss * 0.001,
         fiberStartPosition: fiberStartPos,
         fiberLength: fiberLen,
@@ -238,6 +271,8 @@ export function translateKeyEvents(rawKeyEvents: KeyEventsBlock, trFxdParams: Fx
         fiberStartPosition2: fiberStartPos2,
         fiberLength2: fiberLen2
     }
+
+    return res;
 }
 
 
