@@ -242,11 +242,12 @@ function translateTraceData(traceData: TraceData, sampleSpacing_m: number): Trac
     return res;
 }
 
-export function translateDataPts(rawDataPts: DataPtsBlock, sampleSpacing_m: number): DataPtsTranslated {
+export function translateDataPts(rawDataPts: DataPtsBlock, trFxdParams: FxdParamsTranslated): DataPtsTranslated {
 
     const trTData: TraceDataTranslated[] = [];
 
     for (let i = 0; i < rawDataPts.traces.length; i++) {
+        const sampleSpacing_m = trFxdParams.pulseWidthEntries[i].sampleSpacing_m;
         trTData.push(translateTraceData(rawDataPts.traces[i], sampleSpacing_m));
     }
 

@@ -54,7 +54,7 @@ export class ParsedSORFile {
 
         this.translatedBlocks.genParams = translateGenParams(this.rawBlocks.genParams);
         this.translatedBlocks.fxdParams = translateFxdParams(this.rawBlocks.fxdParams);
-        this.translatedBlocks.dataPts = translateDataPts(this.rawBlocks.dataPts, 0);
+        this.translatedBlocks.dataPts = translateDataPts(this.rawBlocks.dataPts, this.translatedBlocks.fxdParams);
 
         console.log(`Translated GenParams:\n${JSON.stringify(this.translatedBlocks.genParams)}`);
         console.log("=".repeat(10));
