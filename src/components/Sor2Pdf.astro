@@ -7,8 +7,15 @@
 	<input type="button" id="convert-button" name="convert-button" value="Convert" />
 </form>
 
+<div style="width: 800px;">
+	<canvas id="output-graph">
+
+	</canvas>
+</div>
+
 <script>
 import { SorReader } from "../lib/otdr/sor-reader";
+import { createChart } from "../lib/convert";
 
 document.getElementById("convert-button")?.addEventListener("click", async (event) => {
 	const fileSelector = document.getElementById("sor-file") as HTMLInputElement;
@@ -18,5 +25,7 @@ document.getElementById("convert-button")?.addEventListener("click", async (even
 	const fileContents = await selectedFile.arrayBuffer();
 	const reader = new SorReader(fileContents);
 	reader.parse();
+
+	createChart(document.getElementById("output-graph") as HTMLCanvasElement);
 });
 </script>
