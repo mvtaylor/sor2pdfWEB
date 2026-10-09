@@ -7,6 +7,7 @@ export interface RawBlocks {
     fxdParams: FxdParamsBlock | null;
     keyEvents: KeyEventsBlock | null;
     dataPts: DataPtsBlock | null;
+    cksum: null; // change later
 }
 
 export interface TranslatedBlocks {
@@ -14,7 +15,9 @@ export interface TranslatedBlocks {
     genParams: GenParamsTranslated | null;
     supParams: SupParamsTranslated | null;
     fxdParams: FxdParamsTranslated | null;
+    keyEvents: KeyEventsTranslated | null;
     dataPts: DataPtsTranslated | null;
+    cksum: null; // change later
 }
 
 export const fiberTypes = new Map(Object.entries({

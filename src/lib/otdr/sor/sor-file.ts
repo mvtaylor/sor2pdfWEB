@@ -2,7 +2,7 @@
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
 import type { blockInfo, DataPtsBlock, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock, TraceData } from "./blocks";
-import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams, translateDataPts } from "./translation";
+import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams, translateDataPts, translateKeyEvents } from "./translation";
 
 export class ParsedSORFile {
     private br: BinaryReader;
@@ -19,14 +19,17 @@ export class ParsedSORFile {
             supParams: null,
             fxdParams: null,
             keyEvents: null,
-            dataPts: null
+            dataPts: null,
+            cksum: null
         }
         this.translatedBlocks = {
             mapBlock: null,
             genParams: null,
             supParams: null,
             fxdParams: null,
-            dataPts: null
+            keyEvents: null,
+            dataPts: null,
+            cksum: null
         }
         this.rawBlocks.mapBlock = this.parseMapBlock();
         this.offsets = this.constructOffsets();
@@ -54,11 +57,14 @@ export class ParsedSORFile {
 
         this.translatedBlocks.genParams = translateGenParams(this.rawBlocks.genParams);
         this.translatedBlocks.fxdParams = translateFxdParams(this.rawBlocks.fxdParams);
+        this.translatedBlocks.keyEvents = translateKeyEvents(this.rawBlocks.keyEvents, this.translatedBlocks.fxdParams);
         this.translatedBlocks.dataPts = translateDataPts(this.rawBlocks.dataPts, this.translatedBlocks.fxdParams);
 
         console.log(`Translated GenParams:\n${JSON.stringify(this.translatedBlocks.genParams)}`);
         console.log("=".repeat(10));
         console.log(`Translated FxdParams:\n${JSON.stringify(this.translatedBlocks.fxdParams)}`);
+        console.log("=".repeat(10));
+        console.log(`Translated key events:\n${JSON.stringify(this.translatedBlocks.keyEvents)}`);
         console.log("=".repeat(10));
         console.log(`Translated DataPts:\n${JSON.stringify(this.translatedBlocks.dataPts)}`);
     }
