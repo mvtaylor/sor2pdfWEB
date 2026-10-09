@@ -1,4 +1,4 @@
-import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock} from "./blocks";
+import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock, DataPtsTranslated, TraceData, TraceDataTranslated, DataPointTranslated} from "./blocks";
 
 export interface RawBlocks {
     mapBlock: MapBlock | null;
@@ -209,6 +209,50 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
         Y1: rawFxdP.Y1,
         X2: rawFxdP.X2,
         Y2: rawFxdP.Y2
+    }
+
+    return res;
+}
+
+function translateTraceData(traceData: TraceData, sampleSpacing_m: number): TraceDataTranslated {
+    const dtpts: DataPointTranslated[] = [];
+
+    for (let i = 0; i < traceData.dataPoints.length; i++) {
+        const x = i*sampleSpacing_m/1000; // convert to km
+        
+        const rawReading = traceData.dataPoints[i];
+
+        const y = rawReading*(-traceData.scalingFactor)*(10**-6);
+
+        const newPt: DataPointTranslated = {
+            distance_km: x,
+            distance_preferred: x,
+            attenuation_dB: y
+        }
+
+        dtpts.push(newPt);
+    }
+
+    const res: TraceDataTranslated = {
+        numberDataPointsInTrace: traceData.numberDataPointsInTrace,
+        dataPointPairs: dtpts
+    }
+
+    return res;
+}
+
+export function translateDataPts(rawDataPts: DataPtsBlock, sampleSpacing_m: number): DataPtsTranslated {
+
+    const trTData: TraceDataTranslated[] = [];
+
+    for (let i = 0; i < rawDataPts.traces.length; i++) {
+        trTData.push(translateTraceData(rawDataPts.traces[i], sampleSpacing_m));
+    }
+
+    const res: DataPtsTranslated = {
+        numberDataPoints: rawDataPts.numberDataPoints,
+        numberTraces: rawDataPts.numberTraces,
+        traces: trTData
     }
 
     return res;

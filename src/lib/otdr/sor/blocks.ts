@@ -192,7 +192,7 @@ export interface DataPtsBlock {
 }
 
 
-export interface DataPoint {
+export interface DataPointTranslated {
     distance_km: number;
     distance_preferred: number;
     attenuation_dB: number;
@@ -201,7 +201,7 @@ export interface DataPoint {
 export interface TraceDataTranslated {
     numberDataPointsInTrace: number;
 
-    dataPointPairs: DataPoint[];
+    dataPointPairs: DataPointTranslated[];
 }
 
 export interface DataPtsTranslated {
