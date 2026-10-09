@@ -14,6 +14,7 @@ export interface TranslatedBlocks {
     genParams: GenParamsTranslated | null;
     supParams: SupParamsTranslated | null;
     fxdParams: FxdParamsTranslated | null;
+    dataPts: DataPtsTranslated | null;
 }
 
 export const fiberTypes = new Map(Object.entries({

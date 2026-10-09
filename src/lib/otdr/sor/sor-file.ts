@@ -2,7 +2,7 @@
 import { BinaryReader } from "../binary-reader";
 import { blockStarters } from "./blocks";
 import type { blockInfo, DataPtsBlock, FxdParamsBlock, GenParamsBlock, KeyEvent, KeyEventsBlock, MapBlock, PulseWidthEntry, SupParamsBlock, TraceData } from "./blocks";
-import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams } from "./translation";
+import { type TranslatedBlocks, type RawBlocks, translateGenParams, translateFxdParams, translateDataPts } from "./translation";
 
 export class ParsedSORFile {
     private br: BinaryReader;
@@ -25,7 +25,8 @@ export class ParsedSORFile {
             mapBlock: null,
             genParams: null,
             supParams: null,
-            fxdParams: null
+            fxdParams: null,
+            dataPts: null
         }
         this.rawBlocks.mapBlock = this.parseMapBlock();
         this.offsets = this.constructOffsets();
@@ -53,10 +54,13 @@ export class ParsedSORFile {
 
         this.translatedBlocks.genParams = translateGenParams(this.rawBlocks.genParams);
         this.translatedBlocks.fxdParams = translateFxdParams(this.rawBlocks.fxdParams);
+        this.translatedBlocks.dataPts = translateDataPts(this.rawBlocks.dataPts, 0);
 
         console.log(`Translated GenParams:\n${JSON.stringify(this.translatedBlocks.genParams)}`);
         console.log("=".repeat(10));
         console.log(`Translated FxdParams:\n${JSON.stringify(this.translatedBlocks.fxdParams)}`);
+        console.log("=".repeat(10));
+        console.log(`Translated DataPts:\n${JSON.stringify(this.translatedBlocks.dataPts)}`);
     }
 
     parseMapBlock(): MapBlock {
