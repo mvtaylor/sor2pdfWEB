@@ -179,16 +179,16 @@ export interface KeyEventsBlock {
 
 export interface KeyEventTranslated {
     eventNumber: number; // starting from 1
-    timeOfTravel: number; // units of meters
-    slope: number; // dB/km
-    spliceLoss: number; // dB
-    reflectionLoss: number; // dB
+    timeOfTravel_m: number; // units of meters
+    slope_dB: number; // dB/km
+    spliceLoss_dB: number; // dB
+    reflectionLoss_dB: number; // dB
     eventType: string; // form nx9999LS OR others
-    endOfPreviousEvent: number; // time-of-travel in units of meters
-    beginningOfCurrentEvent: number; // time-of-travel in units of meters
-    endOfCurrentEvent: number; // time-of-travel in units of meters
-    beginningOfNextEvent: number; // time-of-travel in units of meters; equals range if last event
-    peakPointCurrentEvent: number; // time-of-travel etc.
+    endOfPreviousEvent_m: number; // time-of-travel in units of meters
+    beginningOfCurrentEvent_m: number; // time-of-travel in units of meters
+    endOfCurrentEvent_m: number; // time-of-travel in units of meters
+    beginningOfNextEvent_m: number; // time-of-travel in units of meters; equals range if last event
+    peakPointCurrentEvent_m: number; // time-of-travel etc.
     comments: string;
 }
 

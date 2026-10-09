@@ -232,16 +232,16 @@ function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated 
     
     const res: KeyEventTranslated = {
         eventNumber: keyEvent.eventNumber,
-        timeOfTravel: TranslationFunctions.timeOfTravelM(keyEvent.timeOfTravel, ior),
-        slope: keyEvent.slope * 0.001,
-        spliceLoss: keyEvent.spliceLoss * 0.001,
-        reflectionLoss: keyEvent.reflectionLoss * 0.001,
+        timeOfTravel_m: TranslationFunctions.timeOfTravelM(keyEvent.timeOfTravel, ior),
+        slope_dB: keyEvent.slope * 0.001,
+        spliceLoss_dB: keyEvent.spliceLoss * 0.001,
+        reflectionLoss_dB: keyEvent.reflectionLoss * 0.001,
         eventType: decodeEventType(keyEvent.eventType),
-        endOfPreviousEvent: TranslationFunctions.timeOfTravelM(keyEvent.endOfPreviousEvent, ior),
-        beginningOfCurrentEvent: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfCurrentEvent, ior),
-        endOfCurrentEvent: TranslationFunctions.timeOfTravelM(keyEvent.endOfCurrentEvent, ior),
-        beginningOfNextEvent: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfNextEvent, ior),
-        peakPointCurrentEvent: TranslationFunctions.timeOfTravelM(keyEvent.peakPointCurrentEvent, ior),
+        endOfPreviousEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.endOfPreviousEvent, ior),
+        beginningOfCurrentEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfCurrentEvent, ior),
+        endOfCurrentEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.endOfCurrentEvent, ior),
+        beginningOfNextEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfNextEvent, ior),
+        peakPointCurrentEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.peakPointCurrentEvent, ior),
         comments: keyEvent.comments
     }
 
