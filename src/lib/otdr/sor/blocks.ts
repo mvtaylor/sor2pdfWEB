@@ -177,6 +177,35 @@ export interface KeyEventsBlock {
 }
 
 
+export interface KeyEventTranslated {
+    eventNumber: number; // starting from 1
+    timeOfTravel: number; // units of meters
+    slope: number; // dB/km
+    spliceLoss: number; // dB
+    reflectionLoss: number; // dB
+    eventType: string; // form nx9999LS OR others
+    endOfPreviousEvent: number; // time-of-travel in units of meters
+    beginningOfCurrentEvent: number; // time-of-travel in units of meters
+    endOfCurrentEvent: number; // time-of-travel in units of meters
+    beginningOfNextEvent: number; // time-of-travel in units of meters; equals range if last event
+    peakPointCurrentEvent: number; // time-of-travel etc.
+    comments: string;
+}
+
+
+export interface KeyEventsTranslated {
+    numberOfEvents: number;
+    keyEvents: KeyEventTranslated[];
+
+    totalLoss: number; // in units of dB
+    fiberStartPosition: number; // distance in units of meters
+    fiberLength: number; // distance in units of meters
+    opticalReturnLoss: number; // in units of dB
+    fiberStartPosition2: number; // usually a repeat
+    fiberLength2: number; // usually a repeat
+}
+
+
 export interface TraceData {
     numberDataPointsInTrace: number;
     scalingFactor: number; // almost always 1000

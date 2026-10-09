@@ -1,4 +1,4 @@
-import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock, DataPtsTranslated, TraceData, TraceDataTranslated, DataPointTranslated} from "./blocks";
+import type {MapBlock, GenParamsBlock, GenParamsTranslated, SupParamsBlock, SupParamsTranslated, FxdParamsBlock, FxdParamsTranslated, PulseWidthEntryTranslated, KeyEventsBlock, DataPtsBlock, DataPtsTranslated, TraceData, TraceDataTranslated, DataPointTranslated, KeyEventsTranslated} from "./blocks";
 
 export interface RawBlocks {
     mapBlock: MapBlock | null;
@@ -109,6 +109,10 @@ export class TranslationFunctions {
         // then divide by the IOR
         return sampleSpacingInt * c0/ior * (10**-8);
     }
+
+    static timeOfTravelM(timeOfTravel_100psInt: number, ior: number): number {
+        return timeOfTravel_100psInt*(10**-4)*c0/ior
+    }
 }
 
 export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated {
@@ -214,6 +218,28 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
 
     return res;
 }
+
+
+export function translateKeyEvents(rawKeyEvents: KeyEventsBlock, trFxdParams: FxdParamsTranslated): KeyEventsTranslated {
+
+    const fiberStartPos = TranslationFunctions.timeOfTravelM(rawKeyEvents.fiberStartPosition, trFxdParams.indexOfRefraction);
+    const fiberLen = TranslationFunctions.timeOfTravelM(rawKeyEvents.fiberLength, trFxdParams.indexOfRefraction);
+
+    const fiberStartPos2 = TranslationFunctions.timeOfTravelM(rawKeyEvents.fiberStartPosition2, trFxdParams.indexOfRefraction);
+    const fiberLen2 = TranslationFunctions.timeOfTravelM(rawKeyEvents.fiberLength2, trFxdParams.indexOfRefraction);
+    
+    const res: KeyEventsTranslated = {
+        numberOfEvents: rawKeyEvents.numberOfEvents,
+        keyEvents: [],
+        totalLoss: rawKeyEvents.totalLoss * 0.001,
+        fiberStartPosition: fiberStartPos,
+        fiberLength: fiberLen,
+        opticalReturnLoss: rawKeyEvents.opticalReturnLoss * 0.001,
+        fiberStartPosition2: fiberStartPos2,
+        fiberLength2: fiberLen2
+    }
+}
+
 
 function translateTraceData(traceData: TraceData, sampleSpacing_m: number): TraceDataTranslated {
     const dtpts: DataPointTranslated[] = [];
