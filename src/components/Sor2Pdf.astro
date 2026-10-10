@@ -1,48 +1,77 @@
 ---
+
 ---
 
 <form>
-	<label for="sor-file">SOR file</label>
-	<input type="file" id="sor-file" name="sor-file" accept=".sor" />
-	<input type="button" id="convert-button" name="convert-button" value="Convert" />
+  <label for="sor-file">SOR file</label>
+  <input type="file" id="sor-file" name="sor-file" accept=".sor" />
+  <input
+    type="button"
+    id="convert-button"
+    name="convert-button"
+    value="Convert"
+  />
 </form>
 
 <p id="error-message" hidden></p>
 
 <div id="results" hidden>
-	
+  <p id="output-language"></p>
+  <p id="output-cableID"></p>
+  <p id="output-fiberID"></p>
 
-	<div style="width: 800px;">
-		<canvas id="output-graph"></canvas>
-	</div>
+  <div style="width: 800px;">
+    <canvas id="output-graph"></canvas>
+  </div>
 </div>
 
 <script>
-import { SorReader } from "../lib/otdr/sor-reader";
-import { createChart } from "../lib/convert";
+  import { SorReader } from "../lib/otdr/sor-reader";
+  import { createChart } from "../lib/convert";
+  import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
+import { undefined } from "astro:schema";
 
-const resultsEl = document.getElementById("results") as HTMLElement;
-const errorEl = document.getElementById("error-message") as HTMLElement;
+  const resultsEl = document.getElementById("results") as HTMLElement;
+  const errorEl = document.getElementById("error-message") as HTMLElement;
 
-document.getElementById("convert-button")?.addEventListener("click", async () => {
-	const fileSelector = document.getElementById("sor-file") as HTMLInputElement;
-	const selectedFile: File | null = fileSelector.files !== null ? fileSelector.files[0] : null;
-	if (selectedFile === null) throw Error("No file selected!");
+  document
+    .getElementById("convert-button")
+    ?.addEventListener("click", async () => {
+      const fileSelector = document.getElementById(
+        "sor-file",
+      ) as HTMLInputElement;
+      const selectedFile: File | null =
+        fileSelector.files !== null ? fileSelector.files[0] : null;
+      if (selectedFile === null) throw Error("No file selected!");
 
-	errorEl.hidden = true;
-	resultsEl.hidden = true;
+      errorEl.hidden = true;
+      resultsEl.hidden = true;
 
-	try {
-		const fileContents = await selectedFile.arrayBuffer();
-		const reader = new SorReader(fileContents);
-		reader.parse();
+      try {
+        const fileContents = await selectedFile.arrayBuffer();
+        const reader = new SorReader(fileContents);
+        reader.parse();
 
-		createChart(document.getElementById("output-graph") as HTMLCanvasElement);
+        setResults(reader);
 
-		resultsEl.hidden = false;
-	} catch (err) {
-		errorEl.textContent = err instanceof Error ? err.message : "Failed to parse SOR file.";
-		errorEl.hidden = false;
+        createChart(
+          document.getElementById("output-graph") as HTMLCanvasElement,
+        );
+
+        resultsEl.hidden = false;
+      } catch (err) {
+        errorEl.textContent =
+          err instanceof Error ? err.message : "Failed to parse SOR file.";
+        errorEl.hidden = false;
+      }
+    });
+
+  function setResults(sorReader: SorReader) {
+    for (const [k, v] of sorReader.results()) {
+		const elem = document.getElementById(`output-${k}`) as HTMLElement;
+		let val = v;
+		if (val === null || val?.trim() === "") val = "<empty>";
+		if (elem !== null && elem.textContent !== null && val) elem.textContent = `${k}: ${v}`;
 	}
-});
+  }
 </script>

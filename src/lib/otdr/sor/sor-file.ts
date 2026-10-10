@@ -155,6 +155,8 @@ export class ParsedSORFile {
         const blockName = this.br.readCString();
         if (blockName !== "GenParams") throw new Error("Error encountered while parsing GenParams: block name is not GenParams");
 
+        const lang = this.br.readChars(2);
+
         const cableID = this.br.readCString();
         const fiberID = this.br.readCString();
 
@@ -175,6 +177,7 @@ export class ParsedSORFile {
         const comments = this.br.readCString();
 
         const genp: GenParamsBlock = {
+            language: lang,
             cableID: cableID,
             fiberID: fiberID,
             fiberType: fiberType,

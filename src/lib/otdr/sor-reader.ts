@@ -17,8 +17,17 @@ export class SorReader {
         this.sorfile = new ParsedSORFile(this.br);
     }
 
-    public results() {
+    // temporary I think
+    public parsedFile() {
+        return this.sorfile;
+    }
 
+    public results() {
+        return new Map(Object.entries({
+            language: this.sorfile.translatedBlocks.genParams?.language,
+            cableID: this.sorfile.translatedBlocks.genParams?.cableID,
+            fiberID: this.sorfile.translatedBlocks.genParams?.fiberID
+        }));
     }
 
     public tracedata(): String[] {

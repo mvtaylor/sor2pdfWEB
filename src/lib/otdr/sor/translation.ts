@@ -133,6 +133,7 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
 
     
     const res: GenParamsTranslated = {
+        language: rawGenP.language,
         cableID: rawGenP.cableID,
         fiberID: rawGenP.fiberID,
         fiberType: fiberTypeString, // TODO: put in actual value
@@ -144,7 +145,7 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
         userOffset: rawGenP.userOffset,
         userOffsetDistance: rawGenP.userOffsetDistance,
         operator: rawGenP.operator,
-        comments: rawGenP.comments
+        comments: rawGenP.comments,
     }
 
     return res;

@@ -27,6 +27,7 @@ export interface MapBlock {
 
 
 export interface GenParamsBlock {
+    language: string;
     cableID: string;
     fiberID: string;
     fiberType: number;
@@ -42,6 +43,7 @@ export interface GenParamsBlock {
 }
 
 export interface GenParamsTranslated {
+    language: string;
     cableID: string;
     fiberID: string;
     fiberType: string; // SMF/MMF/etc.
