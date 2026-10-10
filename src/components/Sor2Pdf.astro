@@ -7,25 +7,42 @@
 	<input type="button" id="convert-button" name="convert-button" value="Convert" />
 </form>
 
-<div style="width: 800px;">
-	<canvas id="output-graph">
+<p id="error-message" hidden></p>
 
-	</canvas>
+<div id="results" hidden>
+	
+
+	<div style="width: 800px;">
+		<canvas id="output-graph"></canvas>
+	</div>
 </div>
 
 <script>
 import { SorReader } from "../lib/otdr/sor-reader";
 import { createChart } from "../lib/convert";
 
-document.getElementById("convert-button")?.addEventListener("click", async (event) => {
+const resultsEl = document.getElementById("results") as HTMLElement;
+const errorEl = document.getElementById("error-message") as HTMLElement;
+
+document.getElementById("convert-button")?.addEventListener("click", async () => {
 	const fileSelector = document.getElementById("sor-file") as HTMLInputElement;
 	const selectedFile: File | null = fileSelector.files !== null ? fileSelector.files[0] : null;
 	if (selectedFile === null) throw Error("No file selected!");
 
-	const fileContents = await selectedFile.arrayBuffer();
-	const reader = new SorReader(fileContents);
-	reader.parse();
+	errorEl.hidden = true;
+	resultsEl.hidden = true;
 
-	createChart(document.getElementById("output-graph") as HTMLCanvasElement);
+	try {
+		const fileContents = await selectedFile.arrayBuffer();
+		const reader = new SorReader(fileContents);
+		reader.parse();
+
+		createChart(document.getElementById("output-graph") as HTMLCanvasElement);
+
+		resultsEl.hidden = false;
+	} catch (err) {
+		errorEl.textContent = err instanceof Error ? err.message : "Failed to parse SOR file.";
+		errorEl.hidden = false;
+	}
 });
 </script>
