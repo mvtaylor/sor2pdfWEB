@@ -12,11 +12,30 @@ export async function createChart(canvas: HTMLCanvasElement) {
         {
             type: "line",
             data: {
-                labels: [1, 2],
                 datasets: [{
+                    label: "Measurements",
                     data: [[1,3], [2, 4]]
                 }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: "linear",
+                        title: {
+                            display: true,
+                            text: "Time (seconds)"
+                        }
+                    },
+
+                    y: {
+                        type: "linear",
+                        title: {
+                            display: true,
+                            text: "Distance"
+                        }
+                    }
+                }
             }
-        }
+        },
     )
 }
