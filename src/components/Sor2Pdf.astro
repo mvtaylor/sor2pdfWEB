@@ -116,6 +116,8 @@
         val = "<empty>";
       } else if (typeof val === "number") {
         val = val.toString();
+      } else if (val instanceof Date) {
+        val = val.toUTCString();
       }
 
       if (elem !== null && elem.textContent !== null && val)
