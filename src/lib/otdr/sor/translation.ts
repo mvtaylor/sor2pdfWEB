@@ -131,7 +131,7 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
         buildConditionString = rawGenP.buildCondition;
     }
 
-    
+
     const res: GenParamsTranslated = {
         language: rawGenP.language,
         cableID: rawGenP.cableID,
@@ -152,7 +152,7 @@ export function translateGenParams(rawGenP: GenParamsBlock): GenParamsTranslated
 }
 
 export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated {
-    const dt: Date = TranslationFunctions.datetime(rawFxdP.datetime);
+    const dt: Date = TranslationFunctions.datetime(rawFxdP.datetime*1000);
 
     const unitsFull = traceUnitsExpanded.get(rawFxdP.units);
     let units = rawFxdP.units;

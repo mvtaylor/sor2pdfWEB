@@ -29,7 +29,8 @@ export class SorReader {
             fiberID: this.sorfile.translatedBlocks.genParams?.fiberID,
             fiberType: this.sorfile.translatedBlocks.genParams?.fiberType,
             wavelengthNominal_nm: this.sorfile.translatedBlocks.genParams?.wavelength,
-            comments: this.sorfile.translatedBlocks.genParams?.comments
+            comments: this.sorfile.translatedBlocks.genParams?.comments,
+            datetime: this.sorfile.translatedBlocks.fxdParams?.datetime
         }));
     }
 
