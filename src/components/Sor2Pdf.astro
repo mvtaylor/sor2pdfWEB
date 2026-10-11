@@ -23,6 +23,14 @@
     <table class="field-table">
       <tbody>
         <tr>
+          <td class="field-label">Filename</td>
+          <td id="output-filename" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Date/time of test</td>
+          <td id="output-datetime" class="field-value"></td>
+        </tr>
+        <tr>
           <td class="field-label">Language</td>
           <td id="output-language" class="field-value"></td>
         </tr>
@@ -33,6 +41,18 @@
         <tr>
           <td class="field-label">Fiber ID</td>
           <td id="output-fiberID" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Fiber type</td>
+          <td id="output-fiberType" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Nominal wavelength (nm)</td>
+          <td id="output-wavelengthNominal_nm" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Comments</td>
+          <td id="output-comments" class="field-value"></td>
         </tr>
       </tbody>
     </table>
@@ -70,6 +90,10 @@
 
         setResults(reader);
 
+        const filenameEl = document.getElementById("output-filename");
+        if (filenameEl !== null && filenameEl.textContent !== null)
+          filenameEl.textContent = selectedFile.name;
+
         createChart(
           document.getElementById("output-graph") as HTMLCanvasElement,
         );
@@ -86,7 +110,14 @@
     for (const [k, v] of sorReader.results()) {
       const elem = document.getElementById(`output-${k}`) as HTMLElement;
       let val = v;
-      if (val === null || val?.trim() === "") val = "<empty>";
+      if (val === null) {
+        val = "<empty>";
+      } else if (typeof val === "string" && val.trim() === "") {
+        val = "<empty>";
+      } else if (typeof val === "number") {
+        val = val.toString();
+      }
+
       if (elem !== null && elem.textContent !== null && val)
         elem.textContent = val;
     }

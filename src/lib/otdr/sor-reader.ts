@@ -26,7 +26,10 @@ export class SorReader {
         return new Map(Object.entries({
             language: this.sorfile.translatedBlocks.genParams?.language,
             cableID: this.sorfile.translatedBlocks.genParams?.cableID,
-            fiberID: this.sorfile.translatedBlocks.genParams?.fiberID
+            fiberID: this.sorfile.translatedBlocks.genParams?.fiberID,
+            fiberType: this.sorfile.translatedBlocks.genParams?.fiberType,
+            wavelengthNominal_nm: this.sorfile.translatedBlocks.genParams?.wavelength,
+            comments: this.sorfile.translatedBlocks.genParams?.comments
         }));
     }
 
