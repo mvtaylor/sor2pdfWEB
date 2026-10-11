@@ -16,10 +16,27 @@
 <p id="error-message" hidden></p>
 
 <div id="results" hidden>
-  <p id="output-language"></p>
-  <p id="output-cableID"></p>
-  <p id="output-fiberID"></p>
+  <h1 id="output-title">OTDR Report</h1>
 
+  <section id="section-generalinformation" class="section">
+    <h2>General information</h2>
+    <table class="field-table">
+      <tbody>
+        <tr>
+          <td class="field-label">Language</td>
+          <td id="output-language" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Cable ID</td>
+          <td id="output-cableID" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Fiber ID</td>
+          <td id="output-fiberID" class="field-value"></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
   <div style="width: 800px;">
     <canvas id="output-graph"></canvas>
   </div>
@@ -29,7 +46,6 @@
   import { SorReader } from "../lib/otdr/sor-reader";
   import { createChart } from "../lib/convert";
   import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
-import { undefined } from "astro:schema";
 
   const resultsEl = document.getElementById("results") as HTMLElement;
   const errorEl = document.getElementById("error-message") as HTMLElement;
@@ -68,10 +84,31 @@ import { undefined } from "astro:schema";
 
   function setResults(sorReader: SorReader) {
     for (const [k, v] of sorReader.results()) {
-		const elem = document.getElementById(`output-${k}`) as HTMLElement;
-		let val = v;
-		if (val === null || val?.trim() === "") val = "<empty>";
-		if (elem !== null && elem.textContent !== null && val) elem.textContent = `${k}: ${v}`;
-	}
+      const elem = document.getElementById(`output-${k}`) as HTMLElement;
+      let val = v;
+      if (val === null || val?.trim() === "") val = "<empty>";
+      if (elem !== null && elem.textContent !== null && val)
+        elem.textContent = val;
+    }
   }
 </script>
+
+<style>
+  .field-table {
+    border-collapse: collapse;
+  }
+
+  .field-table td {
+    border: none;
+    padding: 0.15rem 0.75rem;
+  }
+
+  .field-label {
+    text-align: left;
+    font-weight: 600;
+  }
+
+  .field-value {
+    text-align: left;
+  }
+</style>
