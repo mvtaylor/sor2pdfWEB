@@ -51,6 +51,11 @@ export class SorReader {
     }
 
     public tracedata(): [number, number][] {
-        return [[1, 2], [3,4]];
+        const firstTrace = this.sorfile.translatedBlocks.dataPts?.traces[0];
+        if (firstTrace === undefined) throw new Error("At least one trace required!");
+
+        return firstTrace.dataPointPairs.map(dPoint => {
+            return [dPoint.distance_m, dPoint.attenuation_dB];
+        });
     }
 }
