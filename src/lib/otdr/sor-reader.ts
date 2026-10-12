@@ -22,10 +22,6 @@ export class SorReader {
         return this.sorfile;
     }
 
-    private findSpanLength(): number {
-        return 0;
-    }
-
     public results() {
         const spanLength_km = this.findSpanLength();
 
@@ -57,5 +53,17 @@ export class SorReader {
         return firstTrace.dataPointPairs.map(dPoint => {
             return [dPoint.distance_m, dPoint.attenuation_dB];
         });
+    }
+
+    public findSpanLength(): number {
+        const events = this.sorfile.translatedBlocks.keyEvents?.keyEvents.toSorted((a, b) => {
+            return a.reflectionLoss_dB - b.reflectionLoss_dB;
+        }).filter((a) => (a.reflectionLoss_dB !== 0));
+
+        if (events === undefined) {
+            throw new Error("Unable to sort events by reflection loss!");
+        } else {
+            return events.reverse()[0].timeOfTravel_m;
+        }
     }
 }
