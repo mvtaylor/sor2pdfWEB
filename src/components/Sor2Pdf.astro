@@ -18,7 +18,7 @@
 <div id="results" hidden>
   <h1 id="output-title">OTDR Report</h1>
 
-  <section id="section-generalinformation" class="section">
+  <section id="section-generalInformation" class="section-report">
     <h2>General information</h2>
     <table class="field-table">
       <tbody>
@@ -55,6 +55,12 @@
           <td id="output-comments" class="field-value"></td>
         </tr>
       </tbody>
+    </table>
+  </section>
+  <section id="section-results" class="section-report">
+    <h2>Results</h2>
+    <table class="field-table">
+      <tbody> </tbody>
     </table>
   </section>
   <div style="width: 800px;">
@@ -106,22 +112,58 @@
       }
     });
 
+  function getFieldAsString(value: any): string {
+    let val = "";
+    if (value === null) {
+      val = "<empty>";
+    } else if (typeof value === "string" && value.trim() === "") {
+      val = "<empty>";
+    } else if (typeof val === "number") {
+      val = value.toString();
+    } else if (value instanceof Date) {
+      val = value.toUTCString();
+    } else {
+      val = value;
+    }
+
+    return val;
+  }
+
   function setResults(sorReader: SorReader) {
-    for (const [k, v] of sorReader.results()) {
+    const resultsTableBody = document.querySelector(
+      "#section-results table tbody",
+    );
+
+    const generalInformationMap = new Map(
+      Object.entries(sorReader.results().generalInformation),
+    );
+    for (const [k, v] of generalInformationMap) {
       const elem = document.getElementById(`output-${k}`) as HTMLElement;
-      let val = v;
-      if (val === null) {
-        val = "<empty>";
-      } else if (typeof val === "string" && val.trim() === "") {
-        val = "<empty>";
-      } else if (typeof val === "number") {
-        val = val.toString();
-      } else if (val instanceof Date) {
-        val = val.toUTCString();
-      }
+      const val = getFieldAsString(v);
 
       if (elem !== null && elem.textContent !== null && val)
         elem.textContent = val;
+    }
+
+    const resultsMap = new Map(Object.entries(sorReader.results().results));
+    for (const [key, [desc, val]] of resultsMap) {
+      const tblRowElem = document.createElement("tr");
+
+      const str = getFieldAsString(val);
+
+      const tblDescriptorElem = document.createElement("td");
+      tblDescriptorElem.className = "field-label";
+      tblDescriptorElem.textContent = String(desc);
+
+      const tblValueElem = document.createElement("td");
+      tblValueElem.className = "field-value";
+      tblValueElem.id = `output-${key}`;
+      tblValueElem.textContent = str;
+
+      tblRowElem.appendChild(tblDescriptorElem);
+      tblRowElem.appendChild(tblValueElem);
+
+      resultsTableBody?.appendChild(tblRowElem);
     }
   }
 </script>
