@@ -1,10 +1,11 @@
 
 import { Chart, LineController } from "chart.js/auto";
 import type { KeyEventsTranslated, TraceDataTranslated } from "./otdr/sor/blocks";
+import type { SorReader } from "./otdr/sor-reader";
 
 // add:
 // tracedata: ([number, number])[], keyEvents: KeyEventsTranslated
-export async function createChart(canvas: HTMLCanvasElement) {
+export async function createChart(canvas: HTMLCanvasElement, sorReader: SorReader) {
     Chart.register(LineController);
 
     new Chart(
@@ -14,7 +15,7 @@ export async function createChart(canvas: HTMLCanvasElement) {
             data: {
                 datasets: [{
                     label: "Measurements",
-                    data: [[1,3], [2, 4]]
+                    data: sorReader.tracedata()
                 }]
             },
             options: {
@@ -23,7 +24,7 @@ export async function createChart(canvas: HTMLCanvasElement) {
                         type: "linear",
                         title: {
                             display: true,
-                            text: "Time (seconds)"
+                            text: "Distance (m)"
                         }
                     },
 
@@ -31,7 +32,7 @@ export async function createChart(canvas: HTMLCanvasElement) {
                         type: "linear",
                         title: {
                             display: true,
-                            text: "Distance"
+                            text: "Attenuation (dB)"
                         }
                     }
                 }

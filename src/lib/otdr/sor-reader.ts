@@ -40,17 +40,17 @@ export class SorReader {
                 datetime: this.sorfile.translatedBlocks.fxdParams?.datetime
             },
             results: {
-                spanLength_km: ["Span length (km)", spanLength_km],   
-                spanLoss_dB: ["Span loss (dB)",0],
-                spanORL_dB: ["Span ORL (dB)" ,0],
-                averageLoss_dbPerkm: ["Average loss (dB/km)", 0],
-                averageSpliceLoss_dB: ["Average splice loss (dB)", 0],
-                maxSpliceLoss_dB: ["Maximum splice loss (dB)", 0]
+                spanLength_km: spanLength_km,   
+                spanLoss_dB: 0,
+                spanORL_dB: 0,
+                averageLoss_dbPerkm: 0,
+                averageSpliceLoss_dB: 0,
+                maxSpliceLoss_dB: 0
             }
         };
     }
 
-    public tracedata(): String[] {
-        return [];
+    public tracedata(): [number, number][] {
+        return [[1, 2], [3,4]];
     }
 }

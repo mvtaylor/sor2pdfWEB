@@ -60,7 +60,32 @@
   <section id="section-results" class="section-report">
     <h2>Results</h2>
     <table class="field-table">
-      <tbody> </tbody>
+      <tbody>
+        <tr>
+          <td class="field-label">Span length (km)</td>
+          <td id="output-spanLength_km" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Span loss (dB)</td>
+          <td id="output-spanLoss_dB" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Span ORL (dB)</td>
+          <td id="output-spanORL_dB" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Average loss (dB/km)</td>
+          <td id="output-averageLoss_dbPerkm" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Average splice loss (dB)</td>
+          <td id="output-averageSpliceLoss_dB" class="field-value"></td>
+        </tr>
+        <tr>
+          <td class="field-label">Maximum splice loss (dB)</td>
+          <td id="output-maxSpliceLoss_dB" class="field-value"></td>
+        </tr>
+      </tbody>
     </table>
   </section>
   <div style="width: 800px;">
@@ -102,6 +127,7 @@
 
         createChart(
           document.getElementById("output-graph") as HTMLCanvasElement,
+          reader,
         );
 
         resultsEl.hidden = false;
@@ -130,10 +156,6 @@
   }
 
   function setResults(sorReader: SorReader) {
-    const resultsTableBody = document.querySelector(
-      "#section-results table tbody",
-    );
-
     const generalInformationMap = new Map(
       Object.entries(sorReader.results().generalInformation),
     );
@@ -146,24 +168,13 @@
     }
 
     const resultsMap = new Map(Object.entries(sorReader.results().results));
-    for (const [key, [desc, val]] of resultsMap) {
+    for (const [key, val] of resultsMap) {
       const tblRowElem = document.createElement("tr");
 
       const str = getFieldAsString(val);
 
-      const tblDescriptorElem = document.createElement("td");
-      tblDescriptorElem.className = "field-label";
-      tblDescriptorElem.textContent = String(desc);
-
-      const tblValueElem = document.createElement("td");
-      tblValueElem.className = "field-value";
-      tblValueElem.id = `output-${key}`;
-      tblValueElem.textContent = str;
-
-      tblRowElem.appendChild(tblDescriptorElem);
-      tblRowElem.appendChild(tblValueElem);
-
-      resultsTableBody?.appendChild(tblRowElem);
+      const elem = document.getElementById(`output-${key}`) as HTMLElement;
+      elem.textContent = str;
     }
   }
 </script>
