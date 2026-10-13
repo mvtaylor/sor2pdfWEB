@@ -56,15 +56,19 @@ export class SorReader {
         });
     }
 
-    public findSpanLength(): number {
-        const events = this.reflectiveEvents().toSorted((a, b) => {
+    public findSpanLength(): number | string {
+        const reflEvents = this.reflectiveEvents().toSorted((a, b) => {
             return a.reflectionLoss_dB - b.reflectionLoss_dB;
         });
 
-        if (events.length === 0) {
-            throw new Error("Unable to find any reflective events!");
+        if (reflEvents.length === 0) {
+            const newRes = this.sorfile.translatedBlocks.keyEvents?.keyEvents.at(-1)?.timeOfTravel_m;
+            if (newRes === undefined) {
+                return "<ill defined>";
+            }
+            return newRes;
         } else {
-            return events.reverse()[0].timeOfTravel_m;
+            return reflEvents.reverse()[0].timeOfTravel_m;
         }
     }
 
