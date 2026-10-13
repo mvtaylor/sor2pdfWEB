@@ -91,4 +91,13 @@
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
+
+    /* Keep each section (heading + content) together on one page.
+       The events table is left out since it can grow long enough
+       that forcing it onto a single page would just leave a big
+       gap on the page before it. */
+    .section-report:not(#section-events) {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
 }
