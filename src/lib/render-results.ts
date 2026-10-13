@@ -1,14 +1,14 @@
 import type { SorReader } from "./otdr/sor-reader";
 import type { KeyEventTranslated } from "./otdr/sor/blocks";
 
-export function getFieldAsString(value: any): string {
+export function getFieldAsString(value: any, allowEmpty = false): string {
     let val = "";
     if (value === null) {
         val = "<empty>";
     } else if (typeof value === "string" && value.trim() === "") {
-        val = "<empty>";
-    } else if (typeof val === "number") {
-        val = value.toString();
+        val = allowEmpty ? value : "<empty>";
+    } else if (typeof value === "number") {
+        val = value.toFixed(3);
     } else if (value instanceof Date) {
         val = value.toUTCString();
     } else {
@@ -55,12 +55,24 @@ function createEventsTable(sorReader: SorReader) {
     const propsToInclude = new Map(Object.entries({
         "eventNumber": "Event #",
         "timeOfTravel_m": "Distance (m)",
-        "slope_dB": "Slope (dB)",
+        "slope_dBPerkm": "Slope (dB/km)",
         "spliceLoss_dB": "Splice loss (dB)",
         "reflectionLoss_dB": "Reflection loss (dB)",
         "eventType": "Event type",
         "comments": "Comments"
     }));
+
+    const processingFns: Map<string,((value: KeyEventTranslated) => string)> = new Map();
+    processingFns.set("reflectionLoss_dB", (ev) => {
+        if (ev.eventType !== "reflective") {
+            return "--";
+        } else {
+            return ev.reflectionLoss_dB.toFixed(3);
+        }
+    });
+    processingFns.set("eventNumber", (ev) => {
+        return ev.eventNumber.toFixed(0);
+    });
 
     const headingTR = document.createElement("tr");
     for (const [prop, propDesc] of propsToInclude) {
@@ -72,19 +84,26 @@ function createEventsTable(sorReader: SorReader) {
     eventsTblBodyEl.appendChild(headingTR);
 
     for (let i = 0; i < keyEvents.length; i++) {
-        const newRow = constructEventRow(keyEvents[i], [...propsToInclude.keys()]);
+        const newRow = constructEventRow(keyEvents[i], [...propsToInclude.keys()], processingFns);
         eventsTblBodyEl.appendChild(newRow);
     }
 }
 
-function constructEventRow(keyEvent: KeyEventTranslated, props: string[]): HTMLTableRowElement {
+function constructEventRow(keyEvent: KeyEventTranslated, props: string[], processingFns?: Map<string,((value: KeyEventTranslated) => string)>): HTMLTableRowElement {
     const newTR = document.createElement("tr");
 
     for (const [key, value] of new Map(Object.entries(keyEvent))) {
         if (!props.includes(key)) continue;
 
+        let newValue = value;
+        const possibleFn = processingFns?.get(key);
+        if (possibleFn !== undefined) {
+            newValue = possibleFn(keyEvent);
+        }
+        newValue = getFieldAsString(newValue, true);
+
         const newTD = document.createElement("td");
-        newTD.textContent = value;
+        newTD.textContent = newValue;
         newTR.appendChild(newTD);
     }
 
