@@ -1,28 +1,94 @@
+:root {
+    --sor-border-color: #d9dde3;
+    --sor-row-alt-bg: #f3f6f9;
+    --sor-accent: #2b6cb0;
+    --sor-heading-color: #1a2733;
+    --sor-label-color: #4a5568;
+}
+
 @media print {
     #entryform {
         display: none !important;
     }
 }
 
+#output-title {
+    margin-bottom: 1.5rem;
+    color: var(--sor-heading-color);
+}
+
+.section-report {
+    margin-bottom: 2rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--sor-border-color);
+    border-radius: 8px;
+}
+
+.section-report h2 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--sor-accent);
+    color: var(--sor-heading-color);
+    font-size: 1.1rem;
+}
+
 .field-table {
     border-collapse: collapse;
+    width: 100%;
+}
+
+.field-table tr:nth-child(even) {
+    background: var(--sor-row-alt-bg);
 }
 
 .field-table td {
     border: none;
-    padding: 0.15rem 0.75rem;
+    padding: 0.4rem 0.9rem;
 }
 
 .field-label {
     text-align: left;
     font-weight: 600;
+    color: var(--sor-label-color);
+    width: 45%;
 }
 
 .field-value {
     text-align: left;
+    font-weight: 600;
+    color: var(--sor-heading-color);
+}
+
+.displayed-table {
+    border-collapse: collapse;
+    width: 100%;
 }
 
 .displayed-table td {
-    border: 10rem;
-    border-color: black;
+    border: 1px solid var(--sor-border-color);
+    padding: 0.4rem 0.75rem;
+    text-align: left;
+}
+
+.displayed-table tr:nth-child(even) {
+    background: var(--sor-row-alt-bg);
+}
+
+.events-table-header td {
+    background: var(--sor-accent);
+    color: #fff;
+    font-weight: 600;
+    border-color: var(--sor-accent);
+}
+
+@media print {
+    .section-report,
+    .field-table tr:nth-child(even),
+    .displayed-table tr:nth-child(even),
+    .events-table-header td {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
 }

@@ -45,12 +45,16 @@ function createEventsTable(sorReader: SorReader) {
     const eventsTblBodyEl = document.getElementById("events-table-body") as HTMLElement;
     const noEventsRowEl = document.getElementById("no-events-row") as HTMLElement;
 
+    eventsTblBodyEl.querySelectorAll(".dynamic-event-row").forEach((row) => row.remove());
+
     const keyEvents = sorReader.parsedFile().translatedBlocks.keyEvents?.keyEvents;
 
     if (keyEvents === undefined) {
         noEventsRowEl.hidden = false;
         return;
     }
+
+    noEventsRowEl.hidden = true;
 
     const propsToInclude = new Map(Object.entries({
         "eventNumber": "Event #",
@@ -75,6 +79,7 @@ function createEventsTable(sorReader: SorReader) {
     });
 
     const headingTR = document.createElement("tr");
+    headingTR.classList.add("events-table-header", "dynamic-event-row");
     for (const [prop, propDesc] of propsToInclude) {
         const headingTD = document.createElement("td");
         headingTD.textContent = propDesc;
@@ -91,6 +96,7 @@ function createEventsTable(sorReader: SorReader) {
 
 function constructEventRow(keyEvent: KeyEventTranslated, props: string[], processingFns?: Map<string,((value: KeyEventTranslated) => string)>): HTMLTableRowElement {
     const newTR = document.createElement("tr");
+    newTR.classList.add("dynamic-event-row");
 
     for (const [key, value] of new Map(Object.entries(keyEvent))) {
         if (!props.includes(key)) continue;
