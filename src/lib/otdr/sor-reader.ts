@@ -1,4 +1,5 @@
 import { BinaryReader } from "./binary-reader";
+import type { KeyEventTranslated } from "./sor/blocks";
 import { ParsedSORFile } from "./sor/sor-file";
 
 export class SorReader {
@@ -37,11 +38,11 @@ export class SorReader {
             },
             results: {
                 spanLength_km: spanLength_km,   
-                spanLoss_dB: 0,
-                spanORL_dB: 0,
+                spanLoss_dB: this.sorfile.translatedBlocks.keyEvents?.totalLoss,
+                spanORL_dB: this.sorfile.translatedBlocks.keyEvents?.opticalReturnLoss,
                 averageLoss_dbPerkm: 0,
                 averageSpliceLoss_dB: 0,
-                maxSpliceLoss_dB: 0
+                maxSpliceLoss_dB: this.findMaxSpliceLoss()
             }
         };
     }
@@ -65,5 +66,39 @@ export class SorReader {
         } else {
             return events.reverse()[0].timeOfTravel_m;
         }
+    }
+
+    public nonReflectiveEvents(): KeyEventTranslated[] {
+        let res = this.sorfile.translatedBlocks.keyEvents?.keyEvents.filter(keyEvent => {
+            return keyEvent.reflectionLoss_dB === 0;
+        });
+
+        if (res === undefined) {
+            return [];
+        } else {
+            return res;
+        }
+    }
+
+    public reflectiveEvents(): KeyEventTranslated[] {
+        let res = this.sorfile.translatedBlocks.keyEvents?.keyEvents.filter(keyEvent => {
+            return keyEvent.reflectionLoss_dB !== 0;
+        });
+
+        if (res === undefined) {
+            return [];
+        } else {
+            return res;
+        }
+    }
+
+    public findMaxSpliceLoss(): number | string {
+        const events = this.nonReflectiveEvents().toSorted((a, b) => {
+            return a.spliceLoss_dB - b.spliceLoss_dB;
+        }).toReversed();
+
+        if (events === undefined) return "<ill defined>";
+
+        return events[0].spliceLoss_dB;
     }
 }
