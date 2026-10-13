@@ -40,8 +40,8 @@ export class SorReader {
                 spanLength_km: spanLength_km,   
                 spanLoss_dB: this.sorfile.translatedBlocks.keyEvents?.totalLoss,
                 spanORL_dB: this.sorfile.translatedBlocks.keyEvents?.opticalReturnLoss,
-                averageLoss_dbPerkm: 0,
-                averageSpliceLoss_dB: 0,
+                averageSlope_dbPerkm: this.findAvgSlope(),
+                averageSpliceLoss_dB: this.findAvgSpliceLoss(),
                 maxSpliceLoss_dB: this.findMaxSpliceLoss()
             }
         };
@@ -107,5 +107,31 @@ export class SorReader {
         }
 
         return events[0].spliceLoss_dB;
+    }
+
+    public findAvgSpliceLoss(): number | string {
+        const events = this.nonReflectiveEvents();
+        
+        let total = 0;
+        let n = 0;
+        for (let i = 0; i < events.length; i++) {
+            total += events[i].spliceLoss_dB;
+            n += 1;
+        }
+
+        return total/n;
+    }
+
+    public findAvgSlope(): number | string {
+        const events = this.nonReflectiveEvents();
+        
+        let total = 0;
+        let n = 0;
+        for (let i = 0; i < events.length; i++) {
+            total += events[i].slope_dBPerkm;
+            n += 1;
+        }
+
+        return total/n;
     }
 }
