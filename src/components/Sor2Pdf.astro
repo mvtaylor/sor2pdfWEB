@@ -97,9 +97,12 @@ import "../styles/Sor2Pdf.css";
   import { SorReader } from "../lib/otdr/sor-reader";
   import { createChart } from "../lib/convert";
   import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
+import type { Chart } from "chart.js";
 
   const resultsEl = document.getElementById("results") as HTMLElement;
   const errorEl = document.getElementById("error-message") as HTMLElement;
+  const canvasEl = document.getElementById("output-graph") as HTMLCanvasElement;
+  let chart: Chart<"line"> | undefined;
 
   document
     .getElementById("convert-button")
@@ -114,6 +117,8 @@ import "../styles/Sor2Pdf.css";
       errorEl.hidden = true;
       resultsEl.hidden = true;
 
+      chart?.destroy();
+
       try {
         const fileContents = await selectedFile.arrayBuffer();
         const reader = new SorReader(fileContents);
@@ -125,10 +130,7 @@ import "../styles/Sor2Pdf.css";
         if (filenameEl !== null && filenameEl.textContent !== null)
           filenameEl.textContent = selectedFile.name;
 
-        createChart(
-          document.getElementById("output-graph") as HTMLCanvasElement,
-          reader,
-        );
+        chart = createChart(canvasEl, reader);
 
         resultsEl.hidden = false;
       } catch (err) {

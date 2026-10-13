@@ -8,7 +8,7 @@ import type { SorReader } from "./otdr/sor-reader";
 export async function createChart(canvas: HTMLCanvasElement, sorReader: SorReader) {
     Chart.register(LineController);
 
-    new Chart(
+    return new Chart(
         canvas,
         {
             type: "line",
