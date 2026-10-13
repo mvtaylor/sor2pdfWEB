@@ -57,20 +57,20 @@ export class SorReader {
     }
 
     public findSpanLength(): number {
-        const events = this.sorfile.translatedBlocks.keyEvents?.keyEvents.toSorted((a, b) => {
+        const events = this.reflectiveEvents().toSorted((a, b) => {
             return a.reflectionLoss_dB - b.reflectionLoss_dB;
-        }).filter((a) => (a.reflectionLoss_dB !== 0));
+        });
 
-        if (events === undefined) {
-            throw new Error("Unable to sort events by reflection loss!");
+        if (events.length === 0) {
+            throw new Error("Unable to find any reflective events!");
         } else {
             return events.reverse()[0].timeOfTravel_m;
         }
     }
 
     public nonReflectiveEvents(): KeyEventTranslated[] {
-        let res = this.sorfile.translatedBlocks.keyEvents?.keyEvents.filter(keyEvent => {
-            return keyEvent.reflectionLoss_dB === 0;
+        let res = this.sorfile.translatedBlocks.keyEvents?.keyEvents.filter((keyEvent) => {
+            return keyEvent.eventType === "non-reflective";
         });
 
         if (res === undefined) {
@@ -81,8 +81,8 @@ export class SorReader {
     }
 
     public reflectiveEvents(): KeyEventTranslated[] {
-        let res = this.sorfile.translatedBlocks.keyEvents?.keyEvents.filter(keyEvent => {
-            return keyEvent.reflectionLoss_dB !== 0;
+        let res = this.sorfile.translatedBlocks.keyEvents?.keyEvents.filter((keyEvent) => {
+            return keyEvent.eventType === "reflective";
         });
 
         if (res === undefined) {
@@ -97,7 +97,10 @@ export class SorReader {
             return a.spliceLoss_dB - b.spliceLoss_dB;
         }).toReversed();
 
-        if (events === undefined) return "<ill defined>";
+        if (events === undefined || events.length === 0) {
+            console.log(`Non reflective events: \n${JSON.stringify(this.nonReflectiveEvents())}`)
+            return "<ill defined>";
+        }
 
         return events[0].spliceLoss_dB;
     }

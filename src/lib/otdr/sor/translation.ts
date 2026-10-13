@@ -223,8 +223,19 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
     return res;
 }
 
+// The first character of the raw 8-char event type code (e.g. "1A9999LS")
+// gives the event's subtype; the rest isn't needed yet.
 function decodeEventType(eventType: string): string {
-    return ""; // TODO: placeholder
+    switch (eventType.charAt(0)) {
+        case "0":
+            return "non-reflective";
+        case "1":
+            return "reflective";
+        case "2":
+            return "multiple";
+        default:
+            return "unknown";
+    }
 }
 
 
