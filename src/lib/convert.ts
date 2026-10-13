@@ -5,7 +5,7 @@ import type { SorReader } from "./otdr/sor-reader";
 
 // add:
 // tracedata: ([number, number])[], keyEvents: KeyEventsTranslated
-export async function createChart(canvas: HTMLCanvasElement, sorReader: SorReader) {
+export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Chart<"line", [number, number][]> {
     Chart.register(LineController);
 
     return new Chart(

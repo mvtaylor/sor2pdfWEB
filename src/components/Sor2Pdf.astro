@@ -97,12 +97,13 @@ import "../styles/Sor2Pdf.css";
   import { SorReader } from "../lib/otdr/sor-reader";
   import { createChart } from "../lib/convert";
   import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
-import type { Chart } from "chart.js";
+  import type { Chart } from "chart.js";
 
   const resultsEl = document.getElementById("results") as HTMLElement;
   const errorEl = document.getElementById("error-message") as HTMLElement;
   const canvasEl = document.getElementById("output-graph") as HTMLCanvasElement;
-  let chart: Chart<"line"> | undefined;
+  const inputFormEl = document.getElementById("entryform") as HTMLFormElement;
+  let chart: Chart<"line", [number, number][]> | undefined;
 
   document
     .getElementById("convert-button")
@@ -133,6 +134,8 @@ import type { Chart } from "chart.js";
         chart = createChart(canvasEl, reader);
 
         resultsEl.hidden = false;
+
+        // inputFormEl.hidden = true;
       } catch (err) {
         errorEl.textContent =
           err instanceof Error ? err.message : "Failed to parse SOR file.";
