@@ -31,11 +31,15 @@ export function setResults(sorReader: SorReader) {
 
     const resultsMap = new Map(Object.entries(sorReader.results().results));
     for (const [key, val] of resultsMap) {
-        const tblRowElem = document.createElement("tr");
-
         const str = getFieldAsString(val);
 
         const elem = document.getElementById(`output-${key}`) as HTMLElement;
         elem.textContent = str;
     }
+}
+
+function createEventsTable(sorReader: SorReader) {
+    const eventsTblBodyEl = document.getElementById("events-table-body") as HTMLElement;
+
+    for (let i = 0; i <)
 }

@@ -3,3 +3,26 @@
         display: none !important;
     }
 }
+
+.field-table {
+    border-collapse: collapse;
+}
+
+.field-table td {
+    border: none;
+    padding: 0.15rem 0.75rem;
+}
+
+.field-label {
+    text-align: left;
+    font-weight: 600;
+}
+
+.field-value {
+    text-align: left;
+}
+
+.displayed-table td {
+    border: 10rem;
+    border-color: black;
+}

@@ -91,6 +91,17 @@ import "../styles/Sor2Pdf.css";
   <div style="width: 800px;">
     <canvas id="output-graph"></canvas>
   </div>
+  <section id="section-events" class="section-report">
+    <h2>Events</h2>
+    <table class="displayed-table">
+      <tbody id="events-table-body">
+        <tr>
+          <td>No events</td>
+          <td>No events to display</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
 </div>
 
 <script>
@@ -144,23 +155,3 @@ import "../styles/Sor2Pdf.css";
       }
     });
 </script>
-
-<style>
-  .field-table {
-    border-collapse: collapse;
-  }
-
-  .field-table td {
-    border: none;
-    padding: 0.15rem 0.75rem;
-  }
-
-  .field-label {
-    text-align: left;
-    font-weight: 600;
-  }
-
-  .field-value {
-    text-align: left;
-  }
-</style>
