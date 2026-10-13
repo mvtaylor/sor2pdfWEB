@@ -245,7 +245,7 @@ function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated 
     const res: KeyEventTranslated = {
         eventNumber: keyEvent.eventNumber,
         timeOfTravel_m: TranslationFunctions.timeOfTravelM(keyEvent.timeOfTravel, ior),
-        slope_dB: keyEvent.slope * 0.001,
+        slope_dBPerkm: keyEvent.slope * 0.001,
         spliceLoss_dB: keyEvent.spliceLoss * 0.001,
         reflectionLoss_dB: keyEvent.reflectionLoss * 0.001,
         eventType: decodeEventType(keyEvent.eventType),

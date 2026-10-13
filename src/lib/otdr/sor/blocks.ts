@@ -182,7 +182,7 @@ export interface KeyEventsBlock {
 export interface KeyEventTranslated {
     eventNumber: number; // starting from 1
     timeOfTravel_m: number; // units of meters
-    slope_dB: number; // dB/km
+    slope_dBPerkm: number; // dB/km
     spliceLoss_dB: number; // dB
     reflectionLoss_dB: number; // dB
     eventType: string; // form nx9999LS OR others
