@@ -9,7 +9,14 @@ import "../styles/Sor2Pdf.css";
     type="button"
     id="convert-button"
     name="convert-button"
-    value="Convert"
+    value="Create Report"
+  />
+  <input
+    type="button"
+    id="print-button"
+    name="print-button"
+    value="Save to PDF"
+    hidden
   />
 </form>
 
@@ -118,7 +125,10 @@ import "../styles/Sor2Pdf.css";
   const errorEl = document.getElementById("error-message") as HTMLElement;
   const canvasEl = document.getElementById("output-graph") as HTMLCanvasElement;
   const inputFormEl = document.getElementById("entryform") as HTMLFormElement;
+  const printButtonEl = document.getElementById("print-button") as HTMLInputElement;
+  
   let chart: Chart<"line", [number, number][]> | undefined;
+  let reportTitle = document.title;
 
   document
     .getElementById("convert-button")
@@ -132,6 +142,7 @@ import "../styles/Sor2Pdf.css";
 
       errorEl.hidden = true;
       resultsEl.hidden = true;
+      printButtonEl.hidden = true;
 
       chart?.destroy();
 
@@ -148,11 +159,23 @@ import "../styles/Sor2Pdf.css";
 
         chart = createChart(canvasEl, reader);
 
+        reportTitle = `${selectedFile.name.replace(/\.sor$/i, "")} - OTDR Report`;
+
         resultsEl.hidden = false;
+        printButtonEl.hidden = false;
       } catch (err) {
         errorEl.textContent =
           err instanceof Error ? err.message : "Failed to parse SOR file.";
         errorEl.hidden = false;
       }
     });
+
+  printButtonEl?.addEventListener("click", () => {
+    const originalTitle = document.title;
+    document.title = reportTitle;
+
+    window.print();
+
+    document.title = originalTitle;
+  });
 </script>
