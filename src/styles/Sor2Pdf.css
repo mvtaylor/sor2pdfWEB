@@ -17,6 +17,70 @@
     color: var(--sor-heading-color);
 }
 
+.upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    background: #fff;
+    border: 1px solid var(--sor-border-color);
+    border-radius: 8px;
+}
+
+.upload-form label {
+    font-weight: 600;
+    color: var(--sor-label-color);
+}
+
+.upload-form input[type="file"] {
+    font-size: 0.95rem;
+    color: var(--sor-label-color);
+}
+
+.upload-form input[type="file"]::file-selector-button {
+    margin-right: 0.75rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--sor-border-color);
+    border-radius: 6px;
+    background: var(--sor-row-alt-bg);
+    color: var(--sor-heading-color);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.upload-form input[type="file"]::file-selector-button:hover {
+    background: #e7ebf0;
+}
+
+.upload-form input[type="button"] {
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--sor-accent);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.upload-form input[type="button"]:hover {
+    background: #235a93;
+}
+
+.upload-form input[type="button"]:active {
+    background: #1d4a79;
+}
+
+.upload-form input[type="file"]:focus-visible,
+.upload-form input[type="button"]:focus-visible {
+    outline: 2px solid var(--sor-accent);
+    outline-offset: 2px;
+}
+
 .section-report {
     margin-bottom: 2rem;
     padding: 1rem 1.25rem;

@@ -2,7 +2,7 @@
 import "../styles/Sor2Pdf.css";
 ---
 
-<form id="entryform">
+<form id="entryform" class="upload-form">
   <label for="sor-file">SOR file</label>
   <input type="file" id="sor-file" name="sor-file" accept=".sor" />
   <input
@@ -149,8 +149,6 @@ import "../styles/Sor2Pdf.css";
         chart = createChart(canvasEl, reader);
 
         resultsEl.hidden = false;
-
-        inputFormEl.hidden = true;
       } catch (err) {
         errorEl.textContent =
           err instanceof Error ? err.message : "Failed to parse SOR file.";
