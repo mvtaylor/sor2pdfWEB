@@ -15,7 +15,9 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Ch
             data: {
                 datasets: [{
                     label: "Measurements",
-                    data: sorReader.tracedata()
+                    data: sorReader.tracedata(),
+                    borderWidth: 0.5,
+                    pointRadius: 0
                 }]
             },
             options: {
@@ -32,7 +34,7 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Ch
                         type: "linear",
                         title: {
                             display: true,
-                            text: "Attenuation (dB)"
+                            text: "Optical level (dB)"
                         }
                     }
                 }
