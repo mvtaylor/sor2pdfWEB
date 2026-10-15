@@ -68,11 +68,7 @@ function createEventsTable(sorReader: SorReader) {
 
     const processingFns: Map<string,((value: KeyEventTranslated) => string)> = new Map();
     processingFns.set("reflectionLoss_dB", (ev) => {
-        if (ev.eventType !== "reflective") {
-            return "--";
-        } else {
-            return ev.reflectionLoss_dB.toFixed(3);
-        }
+        return ev.reflectionLoss_dB.toFixed(3);
     });
     processingFns.set("eventNumber", (ev) => {
         return ev.eventNumber.toFixed(0);
