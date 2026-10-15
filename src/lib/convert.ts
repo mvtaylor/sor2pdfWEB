@@ -2,11 +2,25 @@
 import { Chart, LineController } from "chart.js/auto";
 import type { KeyEventsTranslated, TraceDataTranslated } from "./otdr/sor/blocks";
 import type { SorReader } from "./otdr/sor-reader";
+import { getRelativePosition } from "chart.js/helpers";
+import annotationPlugin from "chartjs-plugin-annotation";
+import type { AnnotationOptions } from "chartjs-plugin-annotation";
+
+interface Marker {
+    id: string;
+    x: number;
+    y: number;
+    label: string;
+}
+
+const markers: Marker[] = [];
+let nextMarker = 1;
 
 // add:
 // tracedata: ([number, number])[], keyEvents: KeyEventsTranslated
 export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Chart<"line", [number, number][]> {
     Chart.register(LineController);
+    Chart.register(annotationPlugin);
 
     return new Chart(
         canvas,
@@ -38,8 +52,89 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Ch
                             text: "Optical level (dB)"
                         }
                     }
+                },
+
+                plugins: {
+                    annotation: {
+                        annotations: {},
+                    }
+                },
+
+                onClick(event, _elements, chart) {
+                    const native = event.native;
+
+                    if (!(native instanceof MouseEvent) || !native.shiftKey) {
+                        return;
+                    }
+
+                    const pos = getRelativePosition(native, chart);
+                    const area = chart.chartArea;
+
+                    // Ignore clicks outside the plotting area
+                    if (
+                        pos.x < area.left || pos.x > area.right ||
+                        pos.y < area.top || pos.y > area.bottom
+                    ) {
+                        return;
+                    }
+
+                    const distance = chart.scales.x.getValueForPixel(pos.x);
+                    const point = nearestPoint(sorReader.tracedata(), distance);
+
+                    if (!point) return;
+
+                    const number = nextMarker++;
+
+                    markers.push({
+                        id: `marker-${number}`,
+                        x: point[0],
+                        y: point[1],
+                        label: `M${number}`
+                    });
+
+                    redrawMarkers(chart);
                 }
             }
         },
     )
+}
+
+function nearestPoint(points: [number, number][], distance: number | undefined): [number, number] | undefined {
+    if (points.length === 0 || distance === undefined) return undefined;
+
+    return points.reduce((best, point) => {
+        return Math.abs(point[0] - distance) < Math.abs(best[0] - distance)
+            ? point
+            : best;
+    });
+}
+
+function redrawMarkers(chart: Chart): void {
+    const annotations: Record<string, AnnotationOptions> = {};
+
+    for (const marker of markers) {
+        annotations[marker.id] = {
+            type: "line",
+            xMin: marker.x,
+            xMax: marker.x,
+            yMin: marker.y - 1,
+            yMax: marker.y + 1,
+            borderColor: "#dc2626",
+            borderWidth: 2,
+            adjustScaleRange: false,
+            drawTime: "afterDatasetsDraw",
+
+            label: {
+                display: true,
+                content: `${marker.label}: ${marker.x.toFixed(1)} m`,
+                position: "end",
+                backgroundColor: "#dc2626",
+                color: "white",
+                font: { size: 10 },
+            }
+        };
+    }
+
+    chart.options.plugins!.annotation!.annotations = annotations;
+    chart.update("none");
 }
