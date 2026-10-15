@@ -303,7 +303,7 @@ function translateTraceData(traceData: TraceData, sampleSpacing_m: number): Trac
 
         const newPt: DataPointTranslated = {
             distance_m: x,
-            attenuation_dB: y
+            opticLevel_dB: y
         }
 
         dtpts.push(newPt);

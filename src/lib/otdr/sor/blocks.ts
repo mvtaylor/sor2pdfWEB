@@ -225,7 +225,7 @@ export interface DataPtsBlock {
 
 export interface DataPointTranslated {
     distance_m: number;
-    attenuation_dB: number;
+    opticLevel_dB: number;
 }
 
 export interface TraceDataTranslated {

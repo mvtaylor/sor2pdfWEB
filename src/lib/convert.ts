@@ -17,7 +17,8 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Ch
                     label: "Measurements",
                     data: sorReader.tracedata(),
                     borderWidth: 0.5,
-                    pointRadius: 0
+                    pointRadius: 0,
+                    tension: 0
                 }]
             },
             options: {
