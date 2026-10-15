@@ -52,7 +52,7 @@ export class SorReader {
         if (firstTrace === undefined) throw new Error("At least one trace required!");
 
         return firstTrace.dataPointPairs.map(dPoint => {
-            return [dPoint.distance_m, dPoint.attenuation_dB];
+            return [dPoint.distance_m, dPoint.opticLevel_dB];
         });
     }
 
