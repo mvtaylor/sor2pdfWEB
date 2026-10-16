@@ -139,12 +139,9 @@ import "../styles/Sor2Pdf.css";
   const errorEl = document.getElementById("error-message") as HTMLElement;
   const canvasEl = document.getElementById("output-graph") as HTMLCanvasElement;
   const inputFormEl = document.getElementById("entryform") as HTMLFormElement;
-  const printButtonEl = document.getElementById(
-    "print-button",
-  ) as HTMLInputElement;
-  const clearMarkersButtonEl = document.getElementById(
-    "clear-markers",
-  ) as HTMLInputElement;
+  const printButtonEl = document.getElementById("print-button") as HTMLInputElement;
+  const clearMarkersButtonEl = document.getElementById("clear-markers") as HTMLInputElement;
+  const calculateResultsButtonEl = document.getElementById("calculate-results") as HTMLInputElement;
 
   let chart: Chart<"line", [number, number][]> | undefined;
   let reportTitle = document.title;
@@ -202,5 +199,9 @@ import "../styles/Sor2Pdf.css";
 
   clearMarkersButtonEl.addEventListener("click", () => {
     clearMarkers(chart as Chart, markers);
+  });
+
+  calculateResultsButtonEl.addEventListener("click", () => {
+    window.alert("test");
   });
 </script>
