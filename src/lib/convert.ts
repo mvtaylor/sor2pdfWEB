@@ -55,6 +55,8 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, mar
                 onClick(event, _elements, chart) {
                     const native = event.native;
 
+                    if (markers.length >= 2) return; // only two markers allowed
+
                     if (!(native instanceof MouseEvent) || !native.shiftKey) {
                         return;
                     }
@@ -132,4 +134,12 @@ function redrawMarkers(chart: Chart, markers: Marker[]): void {
 
     chart.options.plugins!.annotation!.annotations = annotations;
     chart.update("none");
+}
+
+export function clearMarkers(chart: Chart, markers: Marker[]):  void {
+    while (markers.length > 0) {
+      markers.pop()
+    }
+
+    redrawMarkers(chart, markers);
 }

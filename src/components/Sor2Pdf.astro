@@ -69,6 +69,12 @@ import "../styles/Sor2Pdf.css";
     <div style="width: 800px;">
       <canvas id="output-graph"></canvas>
     </div>
+    <input
+      type="button"
+      id="clear-markers"
+      name="clear-markers"
+      value="Clear markers"
+    />
   </section>
   <section id="section-results" class="section-report">
     <h2>Results</h2>
@@ -116,7 +122,7 @@ import "../styles/Sor2Pdf.css";
 
 <script>
   import { SorReader } from "../lib/otdr/sor-reader";
-  import { createChart } from "../lib/convert";
+  import { clearMarkers, createChart } from "../lib/convert";
   import { setResults, type Marker } from "../lib/render-results";
   import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
   import type { Chart } from "chart.js";
@@ -125,8 +131,13 @@ import "../styles/Sor2Pdf.css";
   const errorEl = document.getElementById("error-message") as HTMLElement;
   const canvasEl = document.getElementById("output-graph") as HTMLCanvasElement;
   const inputFormEl = document.getElementById("entryform") as HTMLFormElement;
-  const printButtonEl = document.getElementById("print-button") as HTMLInputElement;
-  
+  const printButtonEl = document.getElementById(
+    "print-button",
+  ) as HTMLInputElement;
+  const clearMarkersButtonEl = document.getElementById(
+    "clear-markers",
+  ) as HTMLInputElement;
+
   let chart: Chart<"line", [number, number][]> | undefined;
   let reportTitle = document.title;
 
@@ -180,5 +191,10 @@ import "../styles/Sor2Pdf.css";
     window.print();
 
     document.title = originalTitle;
+  });
+
+  clearMarkersButtonEl.addEventListener("click", () => {
+    clearMarkers(chart as Chart, markers);
+    nextMarker = 1;
   });
 </script>
