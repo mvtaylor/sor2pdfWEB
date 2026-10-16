@@ -40,7 +40,7 @@ export class SorReader {
                 spanLength_km: spanLength_km,   
                 spanLoss_dB: this.sorfile.translatedBlocks.keyEvents?.totalLoss,
                 spanORL_dB: this.sorfile.translatedBlocks.keyEvents?.opticalReturnLoss,
-                averageSlope_dbPerkm: this.findAvgSlope(),
+                averageSlope_dbPerkm: "<place start and end markers to calculate average loss>",
                 averageSpliceLoss_dB: this.findAvgSpliceLoss(),
                 maxSpliceLoss_dB: this.findMaxSpliceLoss()
             }
