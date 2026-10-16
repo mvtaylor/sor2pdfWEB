@@ -1,6 +1,13 @@
 import type { SorReader } from "./otdr/sor-reader";
 import type { KeyEventTranslated } from "./otdr/sor/blocks";
 
+export interface Marker {
+    id: string;
+    x: number;
+    y: number;
+    label: string;
+}
+
 export function getFieldAsString(value: any, allowEmpty = false): string {
     let val = "";
     if (value === null) {

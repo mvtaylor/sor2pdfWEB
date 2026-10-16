@@ -5,20 +5,12 @@ import type { SorReader } from "./otdr/sor-reader";
 import { getRelativePosition } from "chart.js/helpers";
 import annotationPlugin from "chartjs-plugin-annotation";
 import type { AnnotationOptions } from "chartjs-plugin-annotation";
+import type { Marker } from "./render-results";
 
-interface Marker {
-    id: string;
-    x: number;
-    y: number;
-    label: string;
-}
-
-const markers: Marker[] = [];
-let nextMarker = 1;
 
 // add:
 // tracedata: ([number, number])[], keyEvents: KeyEventsTranslated
-export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Chart<"line", [number, number][]> {
+export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, markers: Marker[], nextMarker: number): Chart<"line", [number, number][]> {
     Chart.register(LineController);
     Chart.register(annotationPlugin);
 
@@ -92,7 +84,7 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader): Ch
                         label: `M${number}`
                     });
 
-                    redrawMarkers(chart);
+                    redrawMarkers(chart, markers);
                 }
             }
         },
@@ -109,7 +101,7 @@ function nearestPoint(points: [number, number][], distance: number | undefined):
     });
 }
 
-function redrawMarkers(chart: Chart): void {
+function redrawMarkers(chart: Chart, markers: Marker[]): void {
     const annotations: Record<string, AnnotationOptions> = {};
 
     // console.log(`Top: ${chart.chartArea.top}; bottom: ${chart.chartArea.bottom}`);

@@ -117,7 +117,7 @@ import "../styles/Sor2Pdf.css";
 <script>
   import { SorReader } from "../lib/otdr/sor-reader";
   import { createChart } from "../lib/convert";
-  import { setResults } from "../lib/render-results";
+  import { setResults, type Marker } from "../lib/render-results";
   import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
   import type { Chart } from "chart.js";
 
@@ -129,6 +129,9 @@ import "../styles/Sor2Pdf.css";
   
   let chart: Chart<"line", [number, number][]> | undefined;
   let reportTitle = document.title;
+
+  const markers: Marker[] = [];
+  let nextMarker = 1;
 
   document
     .getElementById("convert-button")
@@ -157,7 +160,7 @@ import "../styles/Sor2Pdf.css";
         if (filenameEl !== null && filenameEl.textContent !== null)
           filenameEl.textContent = selectedFile.name;
 
-        chart = createChart(canvasEl, reader);
+        chart = createChart(canvasEl, reader, markers, nextMarker);
 
         reportTitle = `${selectedFile.name.replace(/\.sor$/i, "")} - OTDR Report`;
 
