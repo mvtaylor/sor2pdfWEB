@@ -112,13 +112,16 @@ function nearestPoint(points: [number, number][], distance: number | undefined):
 function redrawMarkers(chart: Chart): void {
     const annotations: Record<string, AnnotationOptions> = {};
 
+    // console.log(`Top: ${chart.chartArea.top}; bottom: ${chart.chartArea.bottom}`);
+    // console.log(`Value of bottom: ${chart.scales.y.getValueForPixel(chart.chartArea.bottom)}`);
+
     for (const marker of markers) {
         annotations[marker.id] = {
             type: "line",
             xMin: marker.x,
             xMax: marker.x,
-            yMin: marker.y - 1,
-            yMax: marker.y + 1,
+            yMin: chart.scales.y.getValueForPixel(chart.chartArea.bottom),
+            yMax: chart.scales.y.getValueForPixel(chart.chartArea.top),
             borderColor: "#dc2626",
             borderWidth: 2,
             adjustScaleRange: false,
