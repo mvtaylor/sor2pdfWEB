@@ -142,7 +142,6 @@ import "../styles/Sor2Pdf.css";
   let reportTitle = document.title;
 
   const markers: Marker[] = [];
-  let nextMarker = 1;
 
   document
     .getElementById("convert-button")
@@ -171,7 +170,7 @@ import "../styles/Sor2Pdf.css";
         if (filenameEl !== null && filenameEl.textContent !== null)
           filenameEl.textContent = selectedFile.name;
 
-        chart = createChart(canvasEl, reader, markers, nextMarker);
+        chart = createChart(canvasEl, reader, markers);
 
         reportTitle = `${selectedFile.name.replace(/\.sor$/i, "")} - OTDR Report`;
 
@@ -195,6 +194,5 @@ import "../styles/Sor2Pdf.css";
 
   clearMarkersButtonEl.addEventListener("click", () => {
     clearMarkers(chart as Chart, markers);
-    nextMarker = 1;
   });
 </script>

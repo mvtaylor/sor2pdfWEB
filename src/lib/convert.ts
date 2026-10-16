@@ -10,7 +10,7 @@ import type { Marker } from "./render-results";
 
 // add:
 // tracedata: ([number, number])[], keyEvents: KeyEventsTranslated
-export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, markers: Marker[], nextMarker: number): Chart<"line", [number, number][]> {
+export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, markers: Marker[]): Chart<"line", [number, number][]> {
     Chart.register(LineController);
     Chart.register(annotationPlugin);
 
@@ -77,7 +77,7 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, mar
 
                     if (!point) return;
 
-                    const number = nextMarker++;
+                    const number = markers.length + 1;
 
                     markers.push({
                         id: `marker-${number}`,
