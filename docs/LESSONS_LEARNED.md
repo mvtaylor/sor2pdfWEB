@@ -5,6 +5,19 @@ non-bug), recorded so the next agent doesn't have to re-diagnose them from
 scratch. See `docs/ARCHITECTURE.md` for how the pieces referenced below fit
 together.
 
+## Untyped array literals don't infer as tuples
+
+`calculateWithMarkers()` (`render-results.ts`) built `const dataPoints = []`
+and pushed `[marker.x, marker.y]` into it, then passed it to
+`SorReader.calcAvgSlope(dataPoints: [number, number][])`. TypeScript flagged
+`ts(2345)`: `number[]` isn't assignable to the 2-element tuple
+`[number, number]`. Without a contextual type, a pushed array literal like
+`[marker.x, marker.y]` widens to the general `number[]` — TypeScript doesn't
+infer "exactly 2 elements" from it, even though at runtime it always would
+be. Fix: annotate the array up front, `const dataPoints: [number, number][]
+= []`, so each `.push(...)` is checked against the tuple type instead of
+inferred freely.
+
 ## `JSON.stringify()` on a `Map` always prints `"{}"`
 
 A debug `console.log` of a computed `Map<string, number>` kept appearing

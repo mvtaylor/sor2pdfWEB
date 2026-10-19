@@ -120,7 +120,7 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
 }
 
 export function calculateWithMarkers(markers: Marker[]): void {
-    const dataPoints = [];
+    const dataPoints: [number, number][] = [];
     for (const marker of markers) {
         dataPoints.push([marker.x, marker.y]);
     }

@@ -3,20 +3,6 @@
 Small, non-urgent gaps noticed in passing but not fixed in the moment.
 Delete an entry once it's actually fixed.
 
-## `calculateWithMarkers()` has a type error (`astro check` currently fails)
-
-`src/lib/render-results.ts:128` builds `dataPoints` as `number[][]` (via
-`markers.map(m => [m.x, m.y])`-style construction) and passes it to
-`SorReader.calcAvgSlope(dataPoints: [number, number][])`
-(`src/lib/otdr/sor-reader.ts`). TypeScript correctly flags this
-(`ts(2345)`: `number[]` isn't assignable to the 2-tuple `[number, number]`)
-because a generic array literal doesn't statically guarantee exactly two
-elements. `astro build`/`astro dev` don't care (no type-checking), but
-`pnpm astro check` currently exits non-zero because of this. Needs either
-building `dataPoints` as actual tuples, or relaxing
-`calcAvgSlope`'s parameter type to `number[][]` with a runtime length
-check.
-
 ## `Cksum` block is structurally located but never read
 
 The `Map` block correctly records `Cksum`'s byte offset/size, but nothing
