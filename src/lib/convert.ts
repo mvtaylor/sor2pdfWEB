@@ -1,7 +1,7 @@
 
 import { Chart, LineController } from "chart.js/auto";
 import type { KeyEventsTranslated, TraceDataTranslated } from "./otdr/sor/blocks";
-import type { SorReader } from "./otdr/sor-reader";
+import { SorReader } from "./otdr/sor-reader";
 import { getRelativePosition } from "chart.js/helpers";
 import annotationPlugin from "chartjs-plugin-annotation";
 import type { AnnotationOptions } from "chartjs-plugin-annotation";

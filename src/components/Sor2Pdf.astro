@@ -102,7 +102,7 @@ import "../styles/Sor2Pdf.css";
         </tr>
         <tr>
           <td class="field-label">Average slope (dB/km)</td>
-          <td id="output-averageSlope_dbPerkm" class="field-value"></td>
+          <td id="output-averageSlope_dbPerkm" class="field-value calculated-value"></td>
         </tr>
         <tr>
           <td class="field-label">Average splice loss (dB)</td>
@@ -131,7 +131,7 @@ import "../styles/Sor2Pdf.css";
 <script>
   import { SorReader } from "../lib/otdr/sor-reader";
   import { clearMarkers, createChart } from "../lib/convert";
-  import { setResults, type Marker } from "../lib/render-results";
+  import { calculateWithMarkers, setResults, type Marker } from "../lib/render-results";
   import type { GenParamsTranslated } from "../lib/otdr/sor/blocks";
   import type { Chart } from "chart.js";
 
@@ -205,5 +205,7 @@ import "../styles/Sor2Pdf.css";
     if (markers.length !== 2) {
       window.alert("Please place 2 markers down before calculating");
     }
+
+    calculateWithMarkers(markers);
   });
 </script>

@@ -134,4 +134,24 @@ export class SorReader {
 
         return total/n;
     }
+
+    public static calcAvgSlope(dataPoints: [number, number][]): number {
+        if (dataPoints.length < 2) throw new Error("Need at least two data points to calculate average slope!");
+
+        const pairStart = dataPoints.at(0);
+        const pairEnd = dataPoints.at(-1);
+        if (pairStart === undefined || pairEnd === undefined) throw new Error("Cannot have undefined data points when calculating average slope!");
+
+        if (pairStart.length !== 2 || pairEnd.length !== 2) throw new Error("Length of both data pairs must be 2, for x and y!");
+
+        const x1 = pairStart[0];
+        const y1 = pairStart[1];
+
+        const x2 = pairEnd[0];
+        const y2 = pairEnd[1];
+
+        const diffKM = (x2-x1)/1000;
+
+        return (y2-y1)/diffKM;
+    }
 }

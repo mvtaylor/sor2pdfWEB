@@ -1,4 +1,4 @@
-import type { SorReader } from "./otdr/sor-reader";
+import { SorReader } from "./otdr/sor-reader";
 import type { KeyEventTranslated } from "./otdr/sor/blocks";
 
 export interface Marker {
@@ -117,4 +117,16 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
     }
 
     return newTR;
+}
+
+export function calculateWithMarkers(markers: Marker[]): void {
+    const dataPoints = [];
+    for (const marker of markers) {
+        dataPoints.push([marker.x, marker.y]);
+    }
+
+    const avgSlope = SorReader.calcAvgSlope(dataPoints);
+    
+    const elem = document.getElementById("output-averageSlope_dbPerkm") as HTMLTableCellElement;
+    elem.textContent = avgSlope.toFixed(3);
 }
