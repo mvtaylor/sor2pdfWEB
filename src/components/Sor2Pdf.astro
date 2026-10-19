@@ -202,6 +202,8 @@ import "../styles/Sor2Pdf.css";
   });
 
   calculateResultsButtonEl.addEventListener("click", () => {
-    window.alert("test");
+    if (markers.length !== 2) {
+      window.alert("Please place 2 markers down before calculating");
+    }
   });
 </script>
