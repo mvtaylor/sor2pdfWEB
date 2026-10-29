@@ -41,9 +41,44 @@ export function createOtdrEventMarkerPlugin(getEvents: () => readonly OtdrEvent[
 
                 if (
                     !Number.isFinite(x) ||
-                    !Number.isFinite(traceY)
+                    !Number.isFinite(traceY) ||
+                    x < chartArea.left ||
+                    x > chartArea.right ||
+                    traceY < chartArea.top ||
+                    traceY > chartArea.bottom
                 ) {
-                    
+                    continue
+                }
+
+                const y = traceY - 22
+
+                ctx.save()
+                ctx.lineWidth = 0.75
+                ctx.setLineDash([2, 2])
+                ctx.beginPath()
+                ctx.moveTo(x, y + 10)
+                ctx.lineTo(x, traceY)
+                ctx.stroke()
+                ctx.restore()
+
+                ctx.beginPath()
+
+                switch (event.kind) {
+                    case 'reflective':
+                        // Vertical double-headed arrow
+                        ctx.moveTo(x, y-8)
+                        ctx.lineTo(x, y + 8)
+
+                        // Upper arrowhead
+                        ctx.moveTo(x - 4, y - 4)
+                        ctx.lineTo(x, y - 8)
+                        ctx.lineTo(x + 4, y - 4)
+
+                        // Lower arrowhead
+                        ctx.moveTo(x - 4, y + 4)
+                        ctx.lineTo(x, y + 8)
+                        ctx.lineTo(x + 4, y + 4)
+                        break
                 }
             }
         }
