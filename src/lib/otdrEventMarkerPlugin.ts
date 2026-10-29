@@ -80,7 +80,13 @@ export function createOtdrEventMarkerPlugin(getEvents: () => readonly OtdrEvent[
                         ctx.lineTo(x + 4, y + 4)
                         break
                 }
+
+                ctx.stroke()
+
+                ctx.fillText(String(event.number), x, y - 12)
             }
+
+            ctx.restore()
         }
     }
 }

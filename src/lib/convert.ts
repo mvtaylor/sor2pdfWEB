@@ -6,6 +6,7 @@ import { getRelativePosition } from "chart.js/helpers";
 import annotationPlugin from "chartjs-plugin-annotation";
 import type { AnnotationOptions } from "chartjs-plugin-annotation";
 import type { Marker } from "./render-results";
+import { createOtdrEventMarkerPlugin } from "./otdrEventMarkerPlugin";
 
 
 // add:
@@ -27,6 +28,9 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, mar
                     tension: 0
                 }]
             },
+            plugins: [
+                createOtdrEventMarkerPlugin(() => []) // TODO: add in the OTDR events
+            ],
             options: {
                 scales: {
                     x: {
