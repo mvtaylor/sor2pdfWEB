@@ -16,7 +16,7 @@ export function keyEvTrToOtdrEvent(event: KeyEventTranslated, tracedata: [number
     const kind = eventKinds.includes(event.eventType) ? event.eventType : "unknown"
     const x = event.timeOfTravel_m
     const pair = tracedata.find(pair => {
-        return pair[0] === x
+        return Math.abs(x - pair[0]) < 1
     })
     
     if (!pair) throw new Error("Unable to find y-value for event x-value " + x.toString())
