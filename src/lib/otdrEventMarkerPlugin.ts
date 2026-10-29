@@ -1,11 +1,34 @@
 import Chart from "chart.js/auto"
 import type { Plugin } from "chart.js"
+import type { KeyEventTranslated } from "./otdr/sor/blocks"
+
+const eventKinds = ["reflective", "non-reflective", "multiple", "unknown"]
 
 interface OtdrEvent {
     distanceM: number
     traceY: number
     number: number
-    kind: "reflective" | "non-reflective" | "multiple" | "unknown"
+    kind: typeof eventKinds[number]
+}
+
+export function keyEvTrToOtdrEvent(event: KeyEventTranslated, tracedata: [number, number][]): OtdrEvent {
+    const evNum = event.eventNumber
+    const kind = eventKinds.includes(event.eventType) ? event.eventType : "unknown"
+    const x = event.timeOfTravel_m
+    const pair = tracedata.find(pair => {
+        return pair[0] === x
+    })
+    
+    if (!pair) throw new Error("Unable to find y-value for event x-value " + x.toString())
+
+    const traceY = pair[1]
+
+    return {
+        distanceM: x,
+        traceY: traceY,
+        number: evNum,
+        kind: kind
+    }
 }
 
 export function createOtdrEventMarkerPlugin(getEvents: () => readonly OtdrEvent[]): Plugin<"line"> {
