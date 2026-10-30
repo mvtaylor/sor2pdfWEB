@@ -3,7 +3,18 @@ import { BinaryReader } from "./binary-reader";
 import type { KeyEventTranslated } from "./sor/blocks";
 import { ParsedSORFile } from "./sor/sor-file";
 
-const otdrEventKinds = ["reflective", "non-reflective", "multiple", "unknown"]
+const otdrEventKinds = [
+    "reflective",
+    "non-reflective",
+    "multiple",
+    "unknown",
+    "reflective | Fiber end",
+    "non-reflective | Fiber end",
+    "multiple | Fiber end",
+    "unknown | Fiber end",
+]
+// TODO: better account for variance in the event kind by later adding the "end-of-fiber" to a custom attributes thing in the KeyEventTranslated, rather than
+// having it just appended to the event type. Then, this const will only need to have the first four.
 
 export interface OtdrEvent {
     distanceM: number
