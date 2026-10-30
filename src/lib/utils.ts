@@ -34,3 +34,17 @@ export function unwrapObject(obj: object, prefix: string = ""): Map<string, any>
     console.log("unwrapObject: " + JSON.stringify(Object.fromEntries(ret)))
     return ret
 }
+
+export function filterAndSortMap(map: Map<string, any>, includeKeys: string[]): Map<string, any> {
+    const newmap = new Map()
+
+    for (const [key, value] of map) {
+        if (!includeKeys.includes(key)) continue
+
+        newmap.set(key, value)
+    }
+
+    newmap.
+
+    return newmap
+}
