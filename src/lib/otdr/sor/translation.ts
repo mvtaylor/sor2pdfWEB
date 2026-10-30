@@ -223,8 +223,10 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
     return res;
 }
 
-// The first character of the raw 8-char event type code (e.g. "1A9999LS")
-// gives the event's subtype; the rest isn't needed yet.
+/** Decode raw 8-char event type code (e.g. "1A9999LS") into user-friendly description. The first character
+gives the event's subtype: non-reflective/reflective/multiple. The second character being an 'E' indicates end-of-fiber. 
+The last 2 chars indicate the method of characterization/calculation: 'LS' for least squares, 'OT' for other
+*/
 function decodeEventType(eventType: string): string {
     let ret = ""
     switch (eventType.charAt(0)) {
