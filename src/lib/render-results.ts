@@ -108,7 +108,7 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
     const unwrapped = filterAndSortMap(unwrapObject(keyEvent),props)
 
     for (const [key, value] of unwrapped) {
-        console.log(`key=${key}, value=${value}`)
+        // console.log(`key=${key}, value=${value}`)
         if (!props.includes(key)) continue;
 
         // TODO: values are appended in the order they appear in unwrapped; need to be able to reorder them so they correspond to the correct column names
