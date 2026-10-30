@@ -196,6 +196,7 @@ export interface KeyEventTranslated {
     otherAttributes?: {
         endOfFiber: boolean
         methodFound: "Least squares" | "Other" | "Unrecognized"
+        eventTypeDisplay: string
     }
 }
 

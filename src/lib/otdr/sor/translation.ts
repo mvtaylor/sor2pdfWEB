@@ -272,6 +272,13 @@ function eventFoundMethod(eventType: string): "Least squares" | "Other" | "Unrec
     }
 }
 
+function getEventTypeDisplay(eventType: string): string {
+    const maintype = decodeEventType(eventType)
+    const endOfFiberAppend = eventTypeIsEndOfFiber(eventType) ? " | Fiber end" : ""
+
+    return maintype + endOfFiberAppend
+}
+
 
 function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated {
 
@@ -292,7 +299,8 @@ function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated 
 
         otherAttributes: {
             endOfFiber: eventTypeIsEndOfFiber(keyEvent.eventType),
-            methodFound: eventFoundMethod(keyEvent.eventType)
+            methodFound: eventFoundMethod(keyEvent.eventType),
+            eventTypeDisplay: getEventTypeDisplay(keyEvent.eventType)
         }
     }
 
