@@ -40,7 +40,7 @@ export function filterAndSortMap(map: Map<string, any>, includeKeys: string[]): 
 
     for (const key of includeKeys) {
         const val = map.get(key)
-        if (!val) continue
+        if (val === undefined) continue
         newmap.set(key, val)
     }
 
