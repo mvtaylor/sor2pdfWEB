@@ -192,6 +192,11 @@ export interface KeyEventTranslated {
     beginningOfNextEvent_m: number; // time-of-travel in units of meters; equals range if last event
     peakPointCurrentEvent_m: number; // time-of-travel etc.
     comments: string;
+
+    otherAttributes?: {
+        endOfFiber: boolean
+        methodFound: "Least squares" | "Other" | "Unrecognized"
+    }
 }
 
 

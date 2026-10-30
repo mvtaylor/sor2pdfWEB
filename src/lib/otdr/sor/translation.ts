@@ -251,6 +251,25 @@ function decodeEventType(eventType: string): string {
     return ret
 }
 
+function eventTypeIsEndOfFiber(eventType: string): boolean {
+    return eventType.charAt(1) === 'E'
+}
+
+function eventFoundMethod(eventType: string): "Least squares" | "Other" | "Unrecognized" {
+    const methodCode = eventType.slice(-2)
+    switch (methodCode) {
+        case "LS":
+            return "Least squares"
+            break
+        case "OT":
+            return "Other"
+            break
+        default:
+            return "Unrecognized"
+            break
+    }
+}
+
 
 function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated {
 
@@ -267,7 +286,12 @@ function translateKeyEvent(keyEvent: KeyEvent, ior: number): KeyEventTranslated 
         endOfCurrentEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.endOfCurrentEvent, ior),
         beginningOfNextEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.beginningOfNextEvent, ior),
         peakPointCurrentEvent_m: TranslationFunctions.timeOfTravelM(keyEvent.peakPointCurrentEvent, ior),
-        comments: keyEvent.comments
+        comments: keyEvent.comments,
+
+        otherAttributes: {
+            endOfFiber: eventTypeIsEndOfFiber(keyEvent.eventType),
+            methodFound: eventFoundMethod(keyEvent.eventType)
+        }
     }
 
     return res;
