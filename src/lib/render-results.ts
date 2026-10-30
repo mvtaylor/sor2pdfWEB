@@ -1,5 +1,6 @@
 import { SorReader } from "./otdr/sor-reader";
 import type { KeyEventTranslated } from "./otdr/sor/blocks";
+import { unwrapObject } from "./utils";
 
 export interface Marker {
     id: string;
@@ -101,7 +102,11 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
     const newTR = document.createElement("tr");
     newTR.classList.add("dynamic-event-row");
 
-    for (const [key, value] of new Map(Object.entries(keyEvent))) {
+    //const unwrapped = new Map(Object.entries(keyEvent))
+
+    const unwrapped = unwrapObject(keyEvent)
+
+    for (const [key, value] of unwrapped) {
         if (!props.includes(key)) continue;
 
         let newValue = value;
