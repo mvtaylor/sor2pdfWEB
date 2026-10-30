@@ -2,6 +2,35 @@ import { BinaryReader } from "./binary-reader";
 import type { KeyEventTranslated } from "./sor/blocks";
 import { ParsedSORFile } from "./sor/sor-file";
 
+const otdrEventKinds = ["reflective", "non-reflective", "multiple", "unknown"]
+
+export interface OtdrEvent {
+    distanceM: number
+    traceY: number
+    number: number
+    kind: typeof otdrEventKinds[number]
+}
+
+export function keyEvTrToOtdrEvent(event: KeyEventTranslated, tracedata: [number, number][]): OtdrEvent {
+    const evNum = event.eventNumber
+    const kind = otdrEventKinds.includes(event.eventType) ? event.eventType : "unknown"
+    const x = event.timeOfTravel_m
+    const pair = tracedata.find(pair => {
+        return Math.abs(x - pair[0]) < 1
+    })
+
+    if (!pair) throw new Error("Unable to find y-value for event x-value " + x.toString())
+
+    const traceY = pair[1]
+
+    return {
+        distanceM: x,
+        traceY: traceY,
+        number: evNum,
+        kind: kind
+    }
+}
+
 export class SorReader {
     private br: BinaryReader;
     private sorfile!: ParsedSORFile;
@@ -153,5 +182,11 @@ export class SorReader {
         const diffKM = (x2-x1)/1000;
 
         return (y2-y1)/diffKM;
+    }
+
+    public otdrEvents(): OtdrEvent[] {
+        const keyEvents = this.parsedFile().translatedBlocks.keyEvents!.keyEvents
+
+        return keyEvents.map((ev) => keyEvTrToOtdrEvent(ev, this.tracedata()))
     }
 }

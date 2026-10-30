@@ -6,7 +6,7 @@ import { getRelativePosition } from "chart.js/helpers";
 import annotationPlugin from "chartjs-plugin-annotation";
 import type { AnnotationOptions } from "chartjs-plugin-annotation";
 import type { Marker } from "./render-results";
-import { createOtdrEventMarkerPlugin, keyEvTrToOtdrEvent } from "./otdrEventMarkerPlugin";
+import { createOtdrEventMarkerPlugin } from "./otdrEventMarkerPlugin";
 
 
 // add:
@@ -29,9 +29,7 @@ export function createChart(canvas: HTMLCanvasElement, sorReader: SorReader, mar
                 }]
             },
             plugins: [
-                createOtdrEventMarkerPlugin(() => {
-                    return sorReader.parsedFile().translatedBlocks.keyEvents!.keyEvents.map((ev) => keyEvTrToOtdrEvent(ev, sorReader.tracedata()))
-                }) // TODO: move Otdr Event creation to main SOR file
+                createOtdrEventMarkerPlugin(() => sorReader.otdrEvents())
             ],
             options: {
                 scales: {
