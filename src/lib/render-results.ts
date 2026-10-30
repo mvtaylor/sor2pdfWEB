@@ -111,6 +111,8 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
         console.log(`key=${key}, value=${value}`)
         if (!props.includes(key)) continue;
 
+        // TODO: values are appended in the order they appear in unwrapped; need to be able to reorder them so they correspond to the correct column names
+
         let newValue = value;
         const possibleFn = processingFns?.get(key);
         if (possibleFn !== undefined) {
