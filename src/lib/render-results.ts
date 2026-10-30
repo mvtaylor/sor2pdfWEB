@@ -1,6 +1,6 @@
 import { SorReader } from "./otdr/sor-reader";
 import type { KeyEventTranslated } from "./otdr/sor/blocks";
-import { unwrapObject } from "./utils";
+import { filterAndSortMap, unwrapObject } from "./utils";
 
 export interface Marker {
     id: string;
@@ -105,7 +105,7 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
 
     //const unwrapped = new Map(Object.entries(keyEvent))
 
-    const unwrapped = unwrapObject(keyEvent)
+    const unwrapped = filterAndSortMap(unwrapObject(keyEvent),props)
 
     for (const [key, value] of unwrapped) {
         console.log(`key=${key}, value=${value}`)

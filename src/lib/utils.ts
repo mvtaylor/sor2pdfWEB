@@ -38,13 +38,11 @@ export function unwrapObject(obj: object, prefix: string = ""): Map<string, any>
 export function filterAndSortMap(map: Map<string, any>, includeKeys: string[]): Map<string, any> {
     const newmap = new Map()
 
-    for (const [key, value] of map) {
-        if (!includeKeys.includes(key)) continue
-
-        newmap.set(key, value)
+    for (const key of includeKeys) {
+        const val = map.get(key)
+        if (!val) continue
+        newmap.set(key, val)
     }
-
-    newmap.
 
     return newmap
 }
