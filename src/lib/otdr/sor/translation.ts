@@ -244,9 +244,11 @@ function decodeEventType(eventType: string): string {
             break
     }
 
+/* 
     if (eventType.charAt(1) === 'E') {
         ret += " | Fiber end"
     }
+ */
 
     return ret
 }
