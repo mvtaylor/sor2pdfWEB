@@ -226,16 +226,27 @@ export function translateFxdParams(rawFxdP: FxdParamsBlock): FxdParamsTranslated
 // The first character of the raw 8-char event type code (e.g. "1A9999LS")
 // gives the event's subtype; the rest isn't needed yet.
 function decodeEventType(eventType: string): string {
+    let ret = ""
     switch (eventType.charAt(0)) {
         case "0":
-            return "non-reflective";
+            ret = "non-reflective";
+            break
         case "1":
-            return "reflective";
+            ret = "reflective";
+            break
         case "2":
-            return "multiple";
+            ret = "multiple";
+            break
         default:
-            return "unknown";
+            ret = "unknown";
+            break
     }
+
+    if (eventType.charAt(1) === 'E') {
+        ret += " | Fiber end"
+    }
+
+    return ret
 }
 
 
