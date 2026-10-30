@@ -17,15 +17,20 @@ export function nearestPoint(points: [number, number][], distance: number | unde
  */
 export function unwrapObject(obj: object, prefix: string = ""): Map<string, any> {
 
-    const ret = new Map<String, any>()
+    const ret = new Map<string, any>()
 
     type objKey = keyof typeof obj
 
     for (const attr in obj) {
-        if (typeof attr === "object") {
-
+        const val = obj[attr as objKey]
+        if (typeof val === "object") {
+            const subvals = unwrapObject(val, attr + ".")
+            subvals.forEach((v, k) => ret.set(k, v))
         } else {
-            ret.set(attr, obj[attr as objKey])
+            ret.set(prefix + attr, val)
         }
     }
+
+    console.log("unwrapObject: " + JSON.stringify(ret))
+    return ret
 }
