@@ -64,15 +64,16 @@ function createEventsTable(sorReader: SorReader) {
 
     noEventsRowEl.hidden = true;
 
-    const propsToInclude = new Map(Object.entries({
-        "eventNumber": "Event #",
-        "timeOfTravel_m": "Distance (m)",
-        "slope_dBPerkm": "Slope (dB/km)",
-        "spliceLoss_dB": "Splice loss (dB)",
-        "reflectionLoss_dB": "Reflection loss (dB)",
-        "eventType": "Event type",
-        "comments": "Comments"
-    }));
+    const propsToInclude = new Map([
+        ["eventNumber", "Event #"],
+        ["timeOfTravel_m", "Distance (m)"],
+        ["slope_dBPerkm", "Slope (dB/km)"],
+        ["spliceLoss_dB", "Splice loss (dB)"],
+        ["reflectionLoss_dB", "Reflection loss (dB)"],
+        //["eventType", "Event type"],
+        ["otherAttributes.eventTypeDisplay", "Event type"],
+        ["comments", "Comments"]
+    ]);
 
     const processingFns: Map<string,((value: KeyEventTranslated) => string)> = new Map();
     processingFns.set("reflectionLoss_dB", (ev) => {
@@ -107,6 +108,7 @@ function constructEventRow(keyEvent: KeyEventTranslated, props: string[], proces
     const unwrapped = unwrapObject(keyEvent)
 
     for (const [key, value] of unwrapped) {
+        console.log(`key=${key}, value=${value}`)
         if (!props.includes(key)) continue;
 
         let newValue = value;
