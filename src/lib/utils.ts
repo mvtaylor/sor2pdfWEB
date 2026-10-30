@@ -31,6 +31,6 @@ export function unwrapObject(obj: object, prefix: string = ""): Map<string, any>
         }
     }
 
-    console.log("unwrapObject: " + JSON.stringify(ret))
+    console.log("unwrapObject: " + JSON.stringify(Object.fromEntries(ret)))
     return ret
 }
